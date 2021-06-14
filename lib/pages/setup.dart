@@ -9,23 +9,24 @@
   class _SetupState extends State<Setup> {
     // Text Controller to retrieve Text
     final myController = TextEditingController();
+    bool _validate = false;
 
+    // Saving data
+    Future _save(String number) async{
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      pref.setString('phoneNumber', number);
+    }
 
     Future _check() async {
+      print("Check called");
       SharedPreferences pref = await SharedPreferences.getInstance();
-      // pref.clear();
-      key = pref.getString('phoneNumber');
-        print(key);
-      print("check called");
+      print(pref.get('phoneNumber'));
     }
 
-     _save(String number) async {
-      SharedPreferences sp = await SharedPreferences.getInstance();
-
-      await sp.setString('phoneNumber', number);
-      print("save called");
+    Future _clear() async {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      pref.clear();
     }
-
 
     // Function to clear field on disposing widget
     @override
@@ -35,10 +36,8 @@
     }
     @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _check();
-    // print(key);
+    _clear();
   }
 
     @override
@@ -81,6 +80,7 @@
                 child: SizedBox(
                   width: 150,
                   child: TextField(
+                    maxLengthEnforced: true,
                     controller: myController,
                     autofocus: true,
                     keyboardType: TextInputType.phone,
@@ -88,8 +88,8 @@
                     style: TextStyle(
                       color: Colors.amberAccent[200],
                     ),
-
                     decoration: InputDecoration(
+                      errorText: _validate ? 'Enter a valid Phone Number' : null,
                       counterText: "",
                       prefix: Text(
                           "+91",
@@ -108,20 +108,19 @@
                     width: 100,
                     child: FlatButton(
                       onPressed: () {
-                        // print(_check());
-                        if (key==null)
+                        if (myController.text.length < 10 || myController.text.isEmpty)
                           {
-                              // print(myController.text);
-                              _save(myController.text);
-                              // print(_check());
+                            setState(() {
+                              _validate = true;
+                            });
                           }
-                        else
-                          {
-                            print(key);
-                            print(myController.text);
-                            print("Number already saved");
-                            _check();
-                          }
+                        else {
+                          setState(() {
+                            _validate = false;
+                          });
+                          _save(myController.text);
+                          //_check();
+                        }
                       },
                       child: Text(
                         'Submit'
