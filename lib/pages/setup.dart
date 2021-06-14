@@ -52,9 +52,29 @@ class _SetupState extends State<Setup> {
               ),
             ),
             SizedBox(height: 20,),
-            TextField(
-              controller: myController,
-              autofocus: true,
+            Center(
+              child: SizedBox(
+                width: 150,
+                child: TextField(
+                  controller: myController,
+                  autofocus: true,
+                  keyboardType: TextInputType.phone,
+                  maxLength: 10,
+                  style: TextStyle(
+                    color: Colors.amberAccent[200],
+                  ),
+
+                  decoration: InputDecoration(
+                    counterText: "",
+                    prefix: Text(
+                        "+91",
+                      style: TextStyle(
+                        color: Colors.amberAccent[200]
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
             SizedBox(height: 30,),
             Container(
