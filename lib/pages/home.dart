@@ -29,7 +29,9 @@ class Home extends StatelessWidget {
             ),
             SizedBox(height: 90,),
             FlatButton.icon(
-              onPressed: (){},
+              onPressed: (){
+                Navigator.pushReplacementNamed(context, '/setup');
+              },
               color: Colors.amberAccent[200],
               icon: Icon(Icons.navigate_next),
               label: Text("Get Started"),
