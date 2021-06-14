@@ -120,6 +120,7 @@
                           });
                           _save(myController.text);
                           //_check();
+                          Navigator.pushReplacementNamed(context, '/home');
                         }
                       },
                       child: Text(
