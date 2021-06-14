@@ -1,6 +1,6 @@
   import 'package:flutter/material.dart';
   import 'package:shared_preferences/shared_preferences.dart';
-  String? key;
+
   class Setup extends StatefulWidget {
     @override
     _SetupState createState() => _SetupState();
@@ -15,6 +15,7 @@
     Future _save(String number) async{
       SharedPreferences pref = await SharedPreferences.getInstance();
       pref.setString('phoneNumber', number);
+      pref.setBool('isSetUp', true);
     }
 
     Future _check() async {
@@ -37,7 +38,7 @@
     @override
   void initState() {
     super.initState();
-    _clear();
+    //_clear();
   }
 
     @override
