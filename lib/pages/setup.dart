@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Setup extends StatefulWidget {
   @override
@@ -9,7 +10,22 @@ class _SetupState extends State<Setup> {
   // Text Controller to retrieve Text
   final myController = TextEditingController();
 
-  // Function to clear field on disposing widgedt
+
+  checkPhone () async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    String? number = sp.getString('PhoneNumber');
+    print(number);
+    return number;
+  }
+
+  savePhone (String number) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+
+    await sp.setString('PhoneNumber', number);
+  }
+
+
+  // Function to clear field on disposing widget
   @override
   void dispose() {
     myController.dispose();
@@ -83,7 +99,16 @@ class _SetupState extends State<Setup> {
                   width: 100,
                   child: FlatButton(
                     onPressed: () {
-                      print(myController.text);
+                      if (checkPhone() == null)
+                        {
+                            savePhone(myController.text);
+                            print(checkPhone());
+                        }
+                      else if (checkPhone() != null)
+                        {
+                          print("Number already saved");
+                          print(checkPhone());
+                        }
                     },
                     child: Text(
                       'Submit'
