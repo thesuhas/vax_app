@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Home extends StatefulWidget {
@@ -7,6 +8,24 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  String? number = '';
+
+  void getNumber() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      number = prefs.getString('phoneNumber');
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      getNumber();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,6 +39,7 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         backgroundColor: Colors.grey[850],
       ),
+      body: Text("$number"),
     );
   }
 }
