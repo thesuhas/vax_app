@@ -13,22 +13,29 @@ class Home extends StatelessWidget {
             ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.grey[800],
+        backgroundColor: Colors.grey[850],
       ),
-      backgroundColor: Colors.grey[850],
-      body: Column(
-        children: <Widget>[
-          SizedBox(height: 50,),
-          Container(
-            child: Center(
-              child: Icon(
-                  Icons.medication,
-                  size: 150,
-                  color: Colors.amberAccent[200],
-              ),
+      backgroundColor: Colors.grey[900],
+      body: Container(
+        alignment: Alignment.center,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(height: 90,),
+            Icon(
+                Icons.medication,
+                size: 150,
+                color: Colors.amberAccent[200],
             ),
-          ),
-        ],
+            SizedBox(height: 90,),
+            FlatButton.icon(
+              onPressed: (){},
+              color: Colors.amberAccent[200],
+              icon: Icon(Icons.navigate_next),
+              label: Text("Get Started"),
+            )
+          ],
+        ),
       ),
     );
   }
