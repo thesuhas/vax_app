@@ -1,6 +1,6 @@
   import 'package:flutter/material.dart';
   import 'package:shared_preferences/shared_preferences.dart';
-
+  String? key;
   class Setup extends StatefulWidget {
     @override
     _SetupState createState() => _SetupState();
@@ -11,17 +11,19 @@
     final myController = TextEditingController();
 
 
-    Future<String> _check() async {
-      SharedPreferences sp = await SharedPreferences.getInstance();
-      String? key = sp.getString('phoneNumber');
-      print(key);
-      return key ?? '';
+    Future _check() async {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      // pref.clear();
+      key = pref.getString('phoneNumber');
+        print(key);
+      print("check called");
     }
 
      _save(String number) async {
       SharedPreferences sp = await SharedPreferences.getInstance();
 
       await sp.setString('phoneNumber', number);
+      print("save called");
     }
 
 
@@ -31,6 +33,13 @@
       myController.dispose();
       super.dispose();
     }
+    @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _check();
+    // print(key);
+  }
 
     @override
     Widget build(BuildContext context) {
@@ -99,17 +108,19 @@
                     width: 100,
                     child: FlatButton(
                       onPressed: () {
-                        print(_check());
-                        if (_check() == '')
+                        // print(_check());
+                        if (key==null)
                           {
-                              print(myController.text);
+                              // print(myController.text);
                               _save(myController.text);
-                              print(_check());
+                              // print(_check());
                           }
-                        else if (_check() != '')
+                        else
                           {
+                            print(key);
+                            print(myController.text);
                             print("Number already saved");
-                            print(_check());
+                            _check();
                           }
                       },
                       child: Text(
