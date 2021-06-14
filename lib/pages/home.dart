@@ -24,7 +24,7 @@ class Home extends StatelessWidget {
             SizedBox(height: 90,),
             Icon(
                 Icons.medication,
-                size: 150,
+                size: 250,
                 color: Colors.amberAccent[200],
             ),
             SizedBox(height: 90,),
