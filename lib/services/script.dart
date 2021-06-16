@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:crypto/crypto.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Automate{
@@ -58,9 +59,10 @@ class Steps{
 
 
   Future<String> getOtp () async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     String url = 'https://cdn-api.co-vin.in/api/v2/auth/generateMobileOTP';
     Object? data = {
-      'mobile': '9632735877',
+      'mobile': prefs.get('phoneNumber'),
       'secret': 'U2FsdGVkX19PaSqxnwmqk4McfhXokocQjLHrFbskUpcV64Aoq564fJKZ6h5X4fF9iLxBavMj4znDjeIcyNfxJw=='
     };
     Response response = await post(

@@ -1,5 +1,7 @@
   import 'package:flutter/material.dart';
   import 'package:shared_preferences/shared_preferences.dart';
+  import 'package:vax_app/services/script.dart';
+  import 'package:sms_autofill/sms_autofill.dart';
 
   class Setup extends StatefulWidget {
     @override
@@ -10,6 +12,9 @@
     // Text Controller to retrieve Text
     final myController = TextEditingController();
     bool _validate = false;
+
+    Automate aut = Automate(sessionId: "", slots: [""], centerId: "");
+
 
     // Saving data
     Future _save(String number) async{
@@ -27,6 +32,10 @@
     Future _clear() async {
       SharedPreferences pref = await SharedPreferences.getInstance();
       pref.clear();
+    }
+
+    _listen() async {
+      await SmsAutoFill().listenForCode;
     }
 
     // Function to clear field on disposing widget
