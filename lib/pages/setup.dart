@@ -1,7 +1,6 @@
   import 'package:flutter/material.dart';
   import 'package:shared_preferences/shared_preferences.dart';
   import 'package:vax_app/services/script.dart';
-  import 'package:sms_autofill/sms_autofill.dart';
 
   class Setup extends StatefulWidget {
     @override
@@ -34,9 +33,6 @@
       pref.clear();
     }
 
-    _listen() async {
-      await SmsAutoFill().listenForCode;
-    }
 
     // Function to clear field on disposing widget
     @override

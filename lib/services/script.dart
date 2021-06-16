@@ -20,6 +20,8 @@ class Automate{
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
   };
 
+  late Steps step = Steps(headers: headers);
+
 
   // Binding
   Automate( {required this.sessionId, required this.slots, required this.centerId} );
@@ -28,7 +30,6 @@ class Automate{
 
 
   Future<String?> automateOtp() async{
-    Steps step = Steps(headers: headers);
     // String? txnId = await step.getOtp();
     // print(txnId);
     String txnId = await step.getOtp();
@@ -36,12 +37,17 @@ class Automate{
     return txnId;
   }
 
-  Future<void> automateSteps(String? txnId, String otp) async{
-    Steps step = Steps(headers: headers);
+
+
+  Future<String?> automateSteps(String? txnId, String? otp) async{
     String? token = await step.validate(otp, txnId);
     Map<String, String> newHeaders = step.setNewHeaders(token);
     print(newHeaders);
+  }
 
+   Future<String?> beneficiaries() async{
+    print("entered automate ben");
+    await step.getBen();
   }
 
 }
@@ -74,8 +80,12 @@ class Steps{
     return resp['txnId'];
   }
 
-  Future<String>? validate(String otp, String? txnId) async{
+  Future<String>? validate(String? otp, String? txnId) async{
     String url = 'https://cdn-api.co-vin.in/api/v2/auth/validateMobileOtp';
+    if (otp == null)
+      {
+        otp = "";
+      }
     Digest encodedOtp = sha256.convert(utf8.encode(otp));
     Object? data = {
       'otp': encodedOtp.toString(),
@@ -98,4 +108,15 @@ class Steps{
     return headers;
   }
 
+  Future<String?> getBen() async{
+    String url = "https://cdn-api.co-vin.in/api/v2/appointment/beneficiaries";
+
+    Response response = await get(
+        Uri.parse(url),
+        headers: headers
+    );
+    var resp = jsonDecode(response.body);
+    print(resp['beneficiaries']);
+    print(resp['beneficiaries'].runtimeType);
+  }
 }

@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vax_app/services/script.dart';
-import 'package:sms_autofill/sms_autofill.dart';
+import 'package:telephony/telephony.dart';
 
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
 
+backgroundMessageHandler(SmsMessage message) async {
+  //Handle background message
+  String? text = message.body;
+  print("In handler:  $text");
+}
+
 class _HomeState extends State<Home> {
 
   String? number = '';
+  String? txnId = '';
+  String? otp = '';
 
   Automate aut = Automate(sessionId: "", slots: [""], centerId: "");
 
+  final telephony = Telephony.instance;
 
   void getNumber() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -23,8 +32,36 @@ class _HomeState extends State<Home> {
   }
 
   void _listen() async {
-    await SmsAutoFill().listenForCode;
+    bool? permissionsGranted = await telephony.requestSmsPermissions;
+    telephony.listenIncomingSms(
+      onNewMessage: (message) {
+        String? text = message.body?.substring(37, 43);
+        setState(() {
+          otp = text;
+        });
+      },
+      onBackgroundMessage: backgroundMessageHandler,
+      listenInBackground: true,
+    );
   }
+
+  void _validate() async {
+    String? txnId =  await aut.automateOtp();
+    Future.delayed(Duration(seconds: 10), () {
+      aut.automateSteps(txnId, otp);
+    });
+  }
+
+  void _beneficiaries() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? isBen = prefs.getBool('isBen');
+    Future.delayed(Duration(seconds: 12), () {
+      print("entered");
+      print(isBen);
+      aut.beneficiaries();
+    });
+  }
+
 
   @override
   void initState() {
@@ -33,7 +70,13 @@ class _HomeState extends State<Home> {
       getNumber();
     });
     _listen();
-    aut.automateOtp();
+    _validate();
+    _beneficiaries();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -54,19 +97,7 @@ class _HomeState extends State<Home> {
           SizedBox(height: 40,),
           Container(
             padding: EdgeInsets.all(20),
-            child: PinFieldAutoFill(
-              decoration: UnderlineDecoration(
-                textStyle: TextStyle(
-                  color: Colors.amberAccent[200],
-                ),
-                colorBuilder: FixedColorBuilder(
-                  Colors.grey,
-                ),
-              ),
-              onCodeSubmitted: (otp) {
-                print(otp);
-              },
-            ),
+            child: Text("Test"),
           ),
         ],
       ),
