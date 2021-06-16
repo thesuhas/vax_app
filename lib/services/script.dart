@@ -45,7 +45,7 @@ class Automate{
     print(newHeaders);
   }
 
-   Future<String?> beneficiaries() async{
+  Future<String?> beneficiaries() async{
     print("entered automate ben");
     await step.getBen();
   }
@@ -53,6 +53,8 @@ class Automate{
 }
 
 class Steps{
+
+
 
   // Variables supplied
   Map<String, String> headers;
@@ -119,4 +121,47 @@ class Steps{
     print(resp['beneficiaries']);
     print(resp['beneficiaries'].runtimeType);
   }
+
+  Future<dynamic>? book(String sessionId, List slots, String centerId, List benList) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? benString = (prefs.getString('benList'));
+    if(benString == null){
+      benString = '';
+    }
+    Map<String, String> ben = json.decode(benString);
+    List benListOne = [];
+    List benListTwo = [];
+    ben.forEach((key, value) {
+      if(value == '1'){
+        benListOne.add(key);
+      }
+      else{
+        benListTwo.add(key);
+      }
+    });
+    // bens.forEach()
+    String url = "https://cdn-api.co-vin.in/api/v2/appointment/schedule";
+    Object? data = {
+      'dose': 1,
+      'session_id': sessionId,
+      'slot': slots[0],
+      'beneficiaries': benListOne,
+      'center_id': centerId
+    };
+
+    Response response = await post(
+      Uri.parse(url),
+      headers: headers,
+      body: jsonEncode(data),
+    );
+
+    if(response.statusCode == 200){
+      var ret = jsonDecode(response.body);
+      return ret;
+    }
+    else{
+      return null;
+    }
+  }
+
 }
