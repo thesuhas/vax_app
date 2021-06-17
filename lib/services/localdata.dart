@@ -1,81 +1,72 @@
 import 'dart:convert';
 
 class User{
-  int phNo = 0;
-  late int? districtId = 0;
-  late bool? isSetup = false;
+  late int? phNo;
+  late int? districtId;
+  late bool? isSetup;
 
-  User( {required this.phNo, this.districtId, this.isSetup} );
+  User( {this.phNo = 0, this.isSetup = false, this.districtId} );
 
   // Set boolean to check if user has setup phone number
-  User setSetup() {
-    User user = User(phNo: phNo, isSetup: true);
-    return user;
+  void setSetup() {
+    isSetup = true;
   }
 
   // Set district ID for the given phone number
-  User setDId(int districtId) {
-    User user = User(phNo: phNo, districtId: districtId, isSetup: true);
-    return user;
+  void setDId(int dID) {
+    districtId = dID;
   }
 
   // To save this to SharedPreferences
-  String? saveData(User user) {
-    String strData= '';
+  String saveUser() {
     Map<String, dynamic> mapUser = {};
-    mapUser['phNo'] = user.phNo;
-    mapUser['districtId'] = user.districtId;
-    mapUser['isSetup'] = user.isSetup;
-    strData = jsonEncode(mapUser);
-    return strData;
+    mapUser['phNo'] = phNo;
+    mapUser['districtId'] = districtId;
+    mapUser['isSetup'] = isSetup;
+    return jsonEncode(mapUser);
   }
 
   // To decode data when we get from SharedPreferences into this object
-  User getData(String strData){
-    Map<String, dynamic> mapData = json.decode(strData);
-    User user = User(phNo: int.parse(mapData['phNo']));
-    // data.phNo = mapData['phNo'];
+  void getUser(String strUser){
+    Map<String, dynamic> mapUser = json.decode(strUser);
+    phNo = int.parse(mapUser['phNo'].toString());
     try {
-      user.phNo = int.parse(mapData['districtId']);
-      user.isSetup = mapData['isSetup'] == 'true';
+      isSetup = mapUser['isSetup'].toString() == 'true';
+      districtId = int.parse(mapUser['districtId'].toString());
     }
     catch(e){
-      return user;
+      return;
     }
-    return user;
+    return;
   }
 
 }
 
 class Beneficiary{
-  int beneficiaryId = 0;
-  bool isDoseOneDone = false;
-  bool wantFree = false;
-  bool isOld = false;
+  late int? beneficiaryId;
+  late bool? isDoseOneDone;
+  late bool? wantFree;
+  late bool? isOld;
 
-  Beneficiary( {required this.beneficiaryId, required this.isDoseOneDone, required this.isOld, required this.wantFree} );
+  Beneficiary( {this.beneficiaryId = 0, this.isDoseOneDone = false, this.isOld = false, this.wantFree = false} );
 
   // To save this to SharedPreferences
-  String? saveBen(Beneficiary beneficiary){
-    String strBen = '';
+  String saveBen(){
     Map<String,dynamic> mapBen = {};
-    mapBen['beneficiaryId'] = beneficiary.beneficiaryId;
-    mapBen['isDoseOneDone'] = beneficiary.isDoseOneDone;
-    mapBen['wantFree'] = beneficiary.wantFree;
-    mapBen['isOld'] = beneficiary.isOld;
-    strBen = jsonEncode(mapBen);
-    return strBen;
+    mapBen['beneficiaryId'] = beneficiaryId;
+    mapBen['isDoseOneDone'] = isDoseOneDone;
+    mapBen['wantFree'] = wantFree;
+    mapBen['isOld'] = isOld;
+    return jsonEncode(mapBen);
   }
 
   // To decode data when we get from SharedPreferences into this object
-  Beneficiary getBen(String strBen){
+  void getBen(String strBen){
     Map<String,dynamic> mapBen = json.decode(strBen);
-    int beneficiaryId = int.parse(mapBen['beneficiaryId']);
-    bool isDoseOneDone = mapBen['isDoseOneDone'] == 'true';
-    bool wantFree = mapBen['wantFree'] == 'true';
-    bool isOld = mapBen['isOld'] == 'true';
-    Beneficiary beneficiary = Beneficiary(beneficiaryId: beneficiaryId, isDoseOneDone: isDoseOneDone, isOld: isOld, wantFree: wantFree);
-    return beneficiary;
+    beneficiaryId = int.parse(mapBen['beneficiaryId'].toString());
+    isDoseOneDone = mapBen['isDoseOneDone'].toString() == 'true';
+    wantFree = mapBen['wantFree'].toString() == 'true';
+    isOld = mapBen['isOld'].toString() == 'true';
   }
 
 }
