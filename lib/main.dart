@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vax_app/pages/welcome.dart';
 import 'package:vax_app/pages/setup.dart';
 import 'package:vax_app/pages/home.dart';
+import 'package:vax_app/pages/loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -26,6 +27,7 @@ void main() async{
       '/welcome': (context) => Welcome(),
       '/setup': (context) => Setup(),
       '/home': (context) => Home(),
+      '/loading': (context) => LoadingData(),
     },
   ));
 }

@@ -127,7 +127,7 @@
                           });
                           _save(myController.text);
                           //_check();
-                          Navigator.pushReplacementNamed(context, '/home');
+                          Navigator.pushReplacementNamed(context, '/loading');
                         }
                       },
                       style: TextButton.styleFrom(

@@ -19,8 +19,7 @@ class Welcome extends StatelessWidget {
       backgroundColor: Colors.grey[900],
       body: Container(
         alignment: Alignment.center,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: ListView(
           children: <Widget>[
             SizedBox(height: 90,),
             Icon(
@@ -29,19 +28,24 @@ class Welcome extends StatelessWidget {
                 color: Colors.amberAccent[200],
             ),
             SizedBox(height: 90,),
-            TextButton.icon(
-              onPressed: (){
-                Navigator.pushReplacementNamed(context, '/setup');
-              },
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.amberAccent[200],
-                primary: Colors.black,
-                textStyle: TextStyle(
-                  letterSpacing: 0,
+            Center(
+              child: SizedBox(
+                width: 120,
+                child: TextButton.icon(
+                  onPressed: (){
+                    Navigator.pushReplacementNamed(context, '/setup');
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.amberAccent[200],
+                    primary: Colors.black,
+                    textStyle: TextStyle(
+                      letterSpacing: 0,
+                    ),
+                  ),
+                  icon: Icon(Icons.navigate_next),
+                  label: Text("Get Started"),
                 ),
               ),
-              icon: Icon(Icons.navigate_next),
-              label: Text("Get Started"),
             )
           ],
         ),
