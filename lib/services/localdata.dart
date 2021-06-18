@@ -82,8 +82,13 @@ class Beneficiary{
     vaccine = vac.toUpperCase();
   }
 
-  void disableBen(){
-    isEnabled = false;
+  void toggle(){
+    if(isEnabled == true){
+      isEnabled = false;
+    }
+    else{
+      isEnabled = true;
+    }
   }
 
   // To save this to SharedPreferences
