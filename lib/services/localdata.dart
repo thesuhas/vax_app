@@ -6,7 +6,12 @@ class User{
   late bool? isSetup;
   late bool? autoBook;
 
-  User( {this.phNo = 0, this.isSetup = false, this.pinList, this.autoBook = true} );
+  User( {
+    this.phNo = 0,
+    this.isSetup = false,
+    this.pinList,
+    this.autoBook = true,
+  } );
 
   // Set boolean to check if user has setup phone number
   void setSetup() {
@@ -14,7 +19,7 @@ class User{
   }
 
   // Set district ID for the given phone number
-  void setPinList(List<int>? pList) {
+  void setPinList(List<int> pList) {
     pinList = pList;
   }
 
@@ -52,13 +57,39 @@ class User{
 
 class Beneficiary{
   late int? beneficiaryId;
+  late bool? isEnabled;
   late bool? wantFree;
   late bool? isOld;
   late bool? isDoseOneDone;
   late String? vaccine;
   late String? doseOneDate;
 
-  Beneficiary( {this.beneficiaryId = 0, this.isDoseOneDone = false, this.isOld = false, this.wantFree = false, this.vaccine = 'any', this.doseOneDate} );
+  Beneficiary( {
+    this.beneficiaryId = 0,
+    this.isDoseOneDone = false,
+    this.isOld = false,
+    this.wantFree = false,
+    this.vaccine = 'any',
+    this.doseOneDate,
+    this.isEnabled = true,
+  } );
+
+  void setWantFree() {
+    wantFree = true;
+  }
+
+  void setVaccine(String vac){
+    vaccine = vac.toUpperCase();
+  }
+
+  void toggle(){
+    if(isEnabled == true){
+      isEnabled = false;
+    }
+    else{
+      isEnabled = true;
+    }
+  }
 
   // To save this to SharedPreferences
   String saveBen(){
@@ -69,6 +100,7 @@ class Beneficiary{
     mapBen['isOld'] = isOld;
     mapBen['vaccine'] = vaccine;
     mapBen['doseOneDate'] = doseOneDate;
+    mapBen['isEnabled'] = isEnabled;
     return jsonEncode(mapBen);
   }
 
@@ -81,6 +113,7 @@ class Beneficiary{
     isOld = mapBen['isOld'].toString() == 'true';
     vaccine = mapBen['vaccine'].toString();
     doseOneDate = mapBen['doseOneDate'].toString();
+    isEnabled = mapBen['isEnabled'].toString() == 'true';
   }
 
 }
