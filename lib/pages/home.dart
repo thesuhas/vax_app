@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vax_app/services/script.dart';
 import 'package:telephony/telephony.dart';
@@ -91,6 +92,7 @@ class _HomeState extends State<Home> {
         ),
         centerTitle: true,
         backgroundColor: Colors.grey[850],
+        brightness: Brightness.dark,
       ),
       body: ListView(
         children: <Widget>[
