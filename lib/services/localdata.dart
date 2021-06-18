@@ -2,10 +2,11 @@ import 'dart:convert';
 
 class User{
   late int? phNo;
-  late int? districtId;
+  late List<int>? pinList;
   late bool? isSetup;
+  late bool? autoBook;
 
-  User( {this.phNo = 0, this.isSetup = false, this.districtId} );
+  User( {this.phNo = 0, this.isSetup = false, this.pinList, this.autoBook = true} );
 
   // Set boolean to check if user has setup phone number
   void setSetup() {
@@ -13,26 +14,33 @@ class User{
   }
 
   // Set district ID for the given phone number
-  void setDId(int dID) {
-    districtId = dID;
+  void setPinList(List<int>? pList) {
+    pinList = pList;
   }
 
-  // To save this to SharedPreferences
+  // Set the autoBook flag to false
+  void disableAutoBook() {
+    autoBook = false;
+  }
+
+  // Encode to string to save to SharedPreferences
   String saveUser() {
     Map<String, dynamic> mapUser = {};
     mapUser['phNo'] = phNo;
-    mapUser['districtId'] = districtId;
+    mapUser['districtId'] = pinList;
     mapUser['isSetup'] = isSetup;
+    mapUser['autoBook'] = autoBook;
     return jsonEncode(mapUser);
   }
 
-  // To decode data when we get from SharedPreferences into this object
+  // Decode SharedPreferences String into this object
   void getUser(String strUser){
     Map<String, dynamic> mapUser = json.decode(strUser);
     phNo = int.parse(mapUser['phNo'].toString());
     try {
       isSetup = mapUser['isSetup'].toString() == 'true';
-      districtId = int.parse(mapUser['districtId'].toString());
+      autoBook = mapUser['autoBook'].toString() == 'true';
+      pinList = mapUser['districtId'];
     }
     catch(e){
       return;
@@ -44,11 +52,13 @@ class User{
 
 class Beneficiary{
   late int? beneficiaryId;
-  late bool? isDoseOneDone;
   late bool? wantFree;
   late bool? isOld;
+  late bool? isDoseOneDone;
+  late String? vaccine;
+  late String? doseOneDate;
 
-  Beneficiary( {this.beneficiaryId = 0, this.isDoseOneDone = false, this.isOld = false, this.wantFree = false} );
+  Beneficiary( {this.beneficiaryId = 0, this.isDoseOneDone = false, this.isOld = false, this.wantFree = false, this.vaccine = 'any', this.doseOneDate} );
 
   // To save this to SharedPreferences
   String saveBen(){
@@ -57,6 +67,8 @@ class Beneficiary{
     mapBen['isDoseOneDone'] = isDoseOneDone;
     mapBen['wantFree'] = wantFree;
     mapBen['isOld'] = isOld;
+    mapBen['vaccine'] = vaccine;
+    mapBen['doseOneDate'] = doseOneDate;
     return jsonEncode(mapBen);
   }
 
@@ -67,6 +79,20 @@ class Beneficiary{
     isDoseOneDone = mapBen['isDoseOneDone'].toString() == 'true';
     wantFree = mapBen['wantFree'].toString() == 'true';
     isOld = mapBen['isOld'].toString() == 'true';
+    vaccine = mapBen['vaccine'].toString();
+    doseOneDate = mapBen['doseOneDate'].toString();
   }
 
+}
+
+User getUser(String strUser){
+  User user = User();
+  user.getUser(strUser);
+  return user;
+}
+
+Beneficiary getBen(String strBen){
+  Beneficiary beneficiary = Beneficiary();
+  beneficiary.getBen(strBen);
+  return beneficiary;
 }
