@@ -61,11 +61,12 @@ class _LoadingDataState extends State<LoadingData> {
       print("entered");
       //print(isBen);
       aut.beneficiaries();
-      Future.delayed(Duration(seconds: 1), () {
-        Navigator.pushReplacementNamed(context, '/home', arguments: {
-          'beneficiaries': aut.ben,
-        });
-      });
+      // Future.delayed(Duration(seconds: 1), () {
+      //   Navigator.pushReplacementNamed(context, '/home', arguments: {
+      //     'beneficiaries': aut.ben,
+      //   });
+      //});
+      Navigator.pushReplacementNamed(context, '/pincode');
     });
   }
 

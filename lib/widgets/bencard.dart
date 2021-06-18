@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BenCard extends StatefulWidget {
@@ -18,6 +19,26 @@ class BenCard extends StatefulWidget {
 class _BenCardState extends State<BenCard> {
 
   bool? isChecked = false;
+
+  Color? status;
+
+  void setColor() {
+    if (widget.vaccineStatus == "Fully Vaccinated") {
+      status = Colors.green;
+    }
+    else if (widget.vaccineStatus == "Partially Vaccinated") {
+      status = Colors.blue[700];
+    }
+    else {
+      status = Colors.red;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setColor();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +62,15 @@ class _BenCardState extends State<BenCard> {
             Row(
               children: [
                 Text(
-                  "Vaccinated: ${widget.vaccineStatus}",
+                  "Vaccinated: ",
                   style: TextStyle(
                     color: Colors.grey[800],
+                  ),
+                ),
+                Text(
+                  "${widget.vaccineStatus}",
+                  style: TextStyle(
+                    color: status,
                   ),
                 ),
                 Spacer(),
@@ -52,6 +79,7 @@ class _BenCardState extends State<BenCard> {
                     "Vaccine: ${widget.vaccine}",
                     style: TextStyle(
                       color: Colors.grey[800],
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
               ],

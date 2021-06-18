@@ -14,8 +14,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    data = data.isNotEmpty ? data : ModalRoute.of(context)!.settings.arguments as Map;
-    print(data);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -34,7 +32,7 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             BenCard(name: "Suhas Thalanki", benID: "123456789", vaccineStatus: "Partially Vaccinated", vaccine: "COVAXIN",),
             BenCard(name: "Roopak Maddara", benID: "6969696969", vaccineStatus: "Not Vaccinated",),
-            BenCard(name: "Sachin Shankar", benID: "4204204202", vaccineStatus: "Vaccinated", vaccine: "BALLER",),
+            BenCard(name: "Sachin Shankar", benID: "4204204202", vaccineStatus: "Fully Vaccinated", vaccine: "BALLER",),
             BenCard(name: "Hariharisudan Whatever", benID: "987654321", vaccineStatus: "Partially Vaccinated", vaccine: "SPUTNIK",),
             SizedBox(height: 20,),
             Container(
