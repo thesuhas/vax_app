@@ -10,6 +10,7 @@ class Automate{
   late String sessionId;
   late List<String> slots;
   late String centerId;
+  List<dynamic>? ben;
 
 
   Map<String, String> headers = {
@@ -45,9 +46,10 @@ class Automate{
     print(newHeaders);
   }
 
-  Future<String?> beneficiaries() async{
+  Future<void> beneficiaries() async{
     print("entered automate ben");
-    await step.getBen();
+    ben = await step.getBen();
+    //print(ben);
   }
 
 }
@@ -110,7 +112,7 @@ class Steps{
     return headers;
   }
 
-  Future<String?> getBen() async{
+  Future<List?> getBen() async{
     String url = "https://cdn-api.co-vin.in/api/v2/appointment/beneficiaries";
 
     Response response = await get(
@@ -118,8 +120,7 @@ class Steps{
         headers: headers
     );
     var resp = jsonDecode(response.body);
-    print(resp['beneficiaries']);
-    print(resp['beneficiaries'].runtimeType);
+    return resp['beneficiaries'];
   }
 
   Future<dynamic>? book(String sessionId, List slots, String centerId, List benList) async{

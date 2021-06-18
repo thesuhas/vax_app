@@ -56,6 +56,7 @@
               color: Colors.amberAccent[200],
             ),
           ),
+          brightness: Brightness.dark,
           centerTitle: true,
           backgroundColor: Colors.grey[850],
         ),
@@ -112,7 +113,7 @@
                 child: Center(
                   child: SizedBox(
                     width: 100,
-                    child: FlatButton(
+                    child: TextButton(
                       onPressed: () {
                         if (myController.text.length < 10 || myController.text.isEmpty)
                           {
@@ -126,13 +127,18 @@
                           });
                           _save(myController.text);
                           //_check();
-                          Navigator.pushReplacementNamed(context, '/home');
+                          Navigator.pushReplacementNamed(context, '/loading');
                         }
                       },
-                      child: Text(
-                        'Submit'
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.amberAccent[200],
+                        primary: Colors.black,
+                        textStyle: TextStyle(
+                          letterSpacing: 0,
+                        ),
                       ),
-                      color: Colors.amberAccent[200],
+                      child: Text("Submit"),
+
                     ),
                   ),
                 ),

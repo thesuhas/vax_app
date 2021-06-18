@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Welcome extends StatelessWidget {
   @override
@@ -13,12 +14,12 @@ class Welcome extends StatelessWidget {
         ),
         centerTitle: true,
         backgroundColor: Colors.grey[850],
+        brightness: Brightness.dark,
       ),
       backgroundColor: Colors.grey[900],
       body: Container(
         alignment: Alignment.center,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: ListView(
           children: <Widget>[
             SizedBox(height: 90,),
             Icon(
@@ -27,13 +28,24 @@ class Welcome extends StatelessWidget {
                 color: Colors.amberAccent[200],
             ),
             SizedBox(height: 90,),
-            FlatButton.icon(
-              onPressed: (){
-                Navigator.pushReplacementNamed(context, '/setup');
-              },
-              color: Colors.amberAccent[200],
-              icon: Icon(Icons.navigate_next),
-              label: Text("Get Started"),
+            Center(
+              child: SizedBox(
+                width: 120,
+                child: TextButton.icon(
+                  onPressed: (){
+                    Navigator.pushReplacementNamed(context, '/setup');
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.amberAccent[200],
+                    primary: Colors.black,
+                    textStyle: TextStyle(
+                      letterSpacing: 0,
+                    ),
+                  ),
+                  icon: Icon(Icons.navigate_next),
+                  label: Text("Get Started"),
+                ),
+              ),
             )
           ],
         ),
