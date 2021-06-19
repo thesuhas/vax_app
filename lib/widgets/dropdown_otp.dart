@@ -1,19 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-List<String> pincodes = [
-'50001',
-'50002',
-'50003',
-'50004',
-'50005',
-];
+
 typedef OnItemSelectedDropDown = Function (String value);
 
 class DropDownOTP extends StatefulWidget {
 
   final Function(String?) onValueSelected;
-  DropDownOTP({required this.onValueSelected});
+  List<String> pincodes;
+  DropDownOTP({required this.onValueSelected, required this.pincodes});
   @override
   _DropDownOTPState createState() => _DropDownOTPState();
 }
@@ -38,7 +33,7 @@ class _DropDownOTPState extends State<DropDownOTP> {
           alignment: Alignment.center,
           padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
           child: DropdownButton<String>(
-            items: pincodes.map<DropdownMenuItem<String>>((String value) {
+            items: widget.pincodes.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value,style:TextStyle(color:Colors.black),),

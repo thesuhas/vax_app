@@ -10,17 +10,30 @@ class PinCode extends StatefulWidget {
 
 class _PinCodeState extends State<PinCode> {
 
+  List<String> pincodes = [
+    '50001',
+    '50002',
+    '50003',
+    '50004',
+    '50005',
+  ];
+
   void _setUp () async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isSetUp', true);
     print("Set");
   }
 
-  String? chosen1;
-  String? chosen2;
-  String? chosen3;
-  String? chosen4;
-  String? chosen5;
+  bool isError = false;
+  String errorText = '';
+
+  List<String?> chosen = [
+    '',
+    '',
+    '',
+    '',
+    '',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +59,10 @@ class _PinCodeState extends State<PinCode> {
               children: <Widget>[
                 Center(
                   child: Text(
-                    "Choose Preferred OTPs",
+                    "Choose Preferred PinCodes",
                     style: TextStyle(
                       color: Colors.amberAccent[200],
-                      letterSpacing: 5,
+                      letterSpacing: 3,
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     ),
@@ -59,47 +72,87 @@ class _PinCodeState extends State<PinCode> {
                 DropDownOTP(
                   onValueSelected: (value) {
                     setState(() {
-                      chosen1 = value;
+                      chosen[0] = value;
                     });
-                  }
+                  },
+                  pincodes: pincodes,
                 ),
                 DropDownOTP(
                   onValueSelected: (value) {
                     setState(() {
-                      chosen2 = value;
+                      chosen[1] = value;
                     });
                   },
+                  pincodes: pincodes,
                 ),
                 DropDownOTP(
                   onValueSelected: (value) {
                     setState(() {
-                      chosen3 = value;
+                      chosen[2] = value;
                     });
                   },
+                  pincodes: pincodes,
                 ),
                 DropDownOTP(
                   onValueSelected: (value) {
                     setState(() {
-                      chosen4 = value;
+                      chosen[3] = value;
                     });
                   },
+                  pincodes: pincodes,
                 ),
                 DropDownOTP(
                   onValueSelected: (value) {
                     setState(() {
-                      chosen5 = value;
+                      chosen[4] = value;
                     });
                   },
+                  pincodes: pincodes,
                 ),
-                SizedBox(height: 40,),
+                Center(
+                  child: Container(
+                    child: isError ? Container(
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Text(
+                        "$errorText",
+                        style: TextStyle(
+                          color: Colors.red[900],
+                          fontSize: 20,
+                        ),
+                      ),
+                    ): SizedBox(height: 20,),
+                  ),
+                ),
+                SizedBox(height: 20,),
                 Center(
                   child: Container(
                     width: 100,
                     child: TextButton(
                       onPressed: () {
-                        print("Chosen Pincodes: $chosen1, $chosen2, $chosen3, $chosen4, $chosen5");
-                        _setUp();
-                        Navigator.pushReplacementNamed(context, '/home');
+                        print("Chosen Pincodes: $chosen");
+                        // Validation of inputs
+                        if (chosen.contains('') && chosen.where((element) => element == 'Choose a Pincode').length == 5) {
+
+                          setState(() {
+                            isError = true;
+                            errorText = "Pincodes not chosen";
+                          });
+                        }
+                        else if (chosen.toSet().toList().length != chosen.length && !chosen.toSet().toList().contains('')) {
+                          setState(() {
+                            errorText = "Duplicate pincodes chosen";
+                            isError = true;
+                          });
+                        }
+                        else {
+                          if (isError) {
+                            setState(() {
+                              isError = false;
+                            });
+                          }
+                          _setUp();
+                          Navigator.pushReplacementNamed(context, '/home');
+                        }
                       },
                       child: Text(
                         "Submit"
