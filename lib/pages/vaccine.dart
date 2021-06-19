@@ -143,6 +143,18 @@ class _VaccineState extends State<Vaccine> {
                 ),
               ),
             ),
+            SizedBox(height: 50,),
+            Center(
+              child: Text(
+                "Note: This applies only to Beneficiaries who have not taken their first dose yet.",
+                style: TextStyle(
+                  color: Colors.amberAccent[200],
+                  fontSize: 15,
+                  letterSpacing: 1,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ],
         ),
       ),

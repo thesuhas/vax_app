@@ -48,17 +48,6 @@ class _PinCodeState extends State<PinCode> {
 
   @override
   void dispose () {
-    setState(() {
-      errorText = '';
-      isError = false;
-      chosen = [
-        '',
-        '',
-        '',
-        '',
-        '',
-      ];
-    });
     super.dispose();
   }
 

@@ -35,6 +35,7 @@ void main() async{
       '/disclaimer': (context) => Disclaimer(),
       '/vaccine': (context) => Vaccine(),
     },
+    debugShowCheckedModeBanner: false,
   ));
 }
 

@@ -38,7 +38,7 @@ class Disclaimer extends StatelessWidget {
               Text(
                 "1. By agreeing, you are giving us permission to access your location (ONLY once) to get the pincodes nearest to you.\n\n"
                     "2. You will also be giving us access to read your incoming messages so as to automate CoWIN authentication.\n\n"
-                    "3. Your data will not be misused and is not being sent anywhere, any data being accessed by us is being stored locally and our code is completely open to inspection by the public.\n\n"
+                    "3. Your data will not be misused and is not being sent anywhere, any data being accessed by us is being stored locally and even the developers cannot access it.\n\n"
                     "If you have any queries, please let us know at covidindiabot@gmail.com",
                 style: TextStyle(
                   color: Colors.amberAccent[200],
