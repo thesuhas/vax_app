@@ -151,7 +151,7 @@ class _PinCodeState extends State<PinCode> {
                             });
                           }
                           _setUp();
-                          Navigator.pushReplacementNamed(context, '/home');
+                          Navigator.pushReplacementNamed(context, '/vaccine');
                         }
                       },
                       child: Text(
