@@ -26,7 +26,7 @@ class _VaccineState extends State<Vaccine> {
     return Scaffold(
       appBar: AppBar(
       title: Text(
-        "VaxApp",
+        "CoVaccine",
         style: TextStyle(
           color: Colors.amberAccent[200],
         ),

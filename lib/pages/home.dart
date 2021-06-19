@@ -23,7 +23,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "VaxApp",
+          "CoVaccine",
           style: TextStyle(
             color: Colors.amberAccent[200],
           ),

@@ -64,7 +64,7 @@ class _PinCodeState extends State<PinCode> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "VaxApp",
+          "CoVaccine",
           style: TextStyle(
             color: Colors.amberAccent[200],
           ),

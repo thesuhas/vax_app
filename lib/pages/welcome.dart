@@ -7,7 +7,7 @@ class Welcome extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            "VaxApp",
+            "CoVaccine",
             style: TextStyle(
               color: Colors.amberAccent[200],
             ),
