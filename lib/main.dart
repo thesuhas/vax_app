@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vax_app/pages/disclaimer.dart';
 import 'package:vax_app/pages/welcome.dart';
 import 'package:vax_app/pages/setup.dart';
 import 'package:vax_app/pages/home.dart';
@@ -30,6 +31,7 @@ void main() async{
       '/home': (context) => Home(),
       '/pincode': (context) => PinCode(),
       '/loading': (context) => LoadingData(),
+      '/disclaimer': (context) => Disclaimer(),
     },
   ));
 }

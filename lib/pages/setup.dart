@@ -19,6 +19,7 @@
     Future _save(String number) async{
       SharedPreferences pref = await SharedPreferences.getInstance();
       pref.setString('phoneNumber', number);
+      pref.setBool('isSetUp', true);
     }
 
     Future _check() async {
@@ -32,7 +33,6 @@
       pref.clear();
     }
 
-
     // Function to clear field on disposing widget
     @override
     void dispose() {
@@ -44,6 +44,7 @@
     super.initState();
     //_clear();
   }
+
 
     @override
     Widget build(BuildContext context) {

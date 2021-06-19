@@ -33,7 +33,7 @@ class Welcome extends StatelessWidget {
                 width: 120,
                 child: TextButton.icon(
                   onPressed: (){
-                    Navigator.pushReplacementNamed(context, '/setup');
+                    Navigator.pushReplacementNamed(context, '/disclaimer');
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.amberAccent[200],
