@@ -217,6 +217,26 @@ class _HomeState extends State<Home> {
             SizedBox(height: 20,),
             Container(
               margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
+              width: 150,
+              child: Center(
+                child: !_checkBool(widget._booking) ? TextButton.icon(
+                      onPressed: () {},
+                      label: Text(
+                        "Update Beneficiaries"
+                      ),
+                      icon: Icon(Icons.refresh),
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.amberAccent[200],
+                    primary: Colors.black,
+                    textStyle: TextStyle(
+                      letterSpacing: 2,
+                    ),
+                  ),
+                ): SizedBox(),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
               width: !_checkBool(widget._booking) ? 50 : 100,
               child: Center(
                 child: !_checkBool(widget._booking) ? TextButton(
