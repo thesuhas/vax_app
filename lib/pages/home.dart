@@ -26,6 +26,49 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.grey[850],
         brightness: Brightness.dark,
       ),
+      drawer: Drawer(
+        child: Container(
+          color: Colors.grey[900],
+          child: ListView(
+            children: <Widget>[
+              Container(
+                height: 80,
+                child: DrawerHeader(
+
+                  child: Text(
+                    "Pages",
+                    style: TextStyle(
+                      color: Colors.amberAccent[200],
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.all(10),
+                child: ListTile(
+                  title: Text(
+                      "Change Pincodes",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, '/pincode');
+                  },
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.amberAccent[200],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       backgroundColor: Colors.grey[900],
       body: Container(
         child: ListView(

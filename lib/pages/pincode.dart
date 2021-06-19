@@ -131,7 +131,7 @@ class _PinCodeState extends State<PinCode> {
                       onPressed: () {
                         print("Chosen Pincodes: $chosen");
                         // Validation of inputs
-                        if (chosen.contains('') && chosen.where((element) => element == 'Choose a Pincode').length == 5) {
+                        if (chosen.contains('') && chosen.where((element) => element == '').length == 5) {
 
                           setState(() {
                             isError = true;
