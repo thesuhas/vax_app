@@ -58,10 +58,21 @@ class _HomeState extends State<Home> {
     return true;
   }
 
+  void _update() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('updateBen', true);
+  }
+
+  void _resetUpdate() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('updateBen', false);
+  }
+
   @override
   void initState() {
     super.initState();
     _checkBooking();
+    _resetUpdate();
   }
 
   @override
@@ -220,7 +231,10 @@ class _HomeState extends State<Home> {
               width: 150,
               child: Center(
                 child: !_checkBool(widget._booking) ? TextButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        _update();
+                        Navigator.pushReplacementNamed(context, '/loading');
+                      },
                       label: Text(
                         "Update Beneficiaries"
                       ),

@@ -12,9 +12,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.clear();
+  //prefs.clear();
   bool? isSetUp = prefs.getBool('isSetUp');
-  //print(isSetUp);
+  print(isSetUp);
   String initialRoute;
   if (isSetUp == true)
     {

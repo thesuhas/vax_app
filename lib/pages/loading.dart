@@ -25,6 +25,8 @@ class _LoadingDataState extends State<LoadingData> {
 
   final telephony = Telephony.instance;
 
+  bool? isUpdate;
+
   void getNumber() async {
     // Get Shared Preferences to extract Data
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -62,7 +64,12 @@ class _LoadingDataState extends State<LoadingData> {
       print("entered");
       //print(isBen);
       aut.beneficiaries();
-      Navigator.pushReplacementNamed(context, '/pincode');
+      if (isUpdate == true) {
+        Navigator.pushReplacementNamed(context, '/home');
+      }
+      else {
+        Navigator.pushReplacementNamed(context, '/pincode');
+      }
     });
   }
 
@@ -87,11 +94,19 @@ class _LoadingDataState extends State<LoadingData> {
     print("Location: $_location");
   }
 
+  void _isUpdate() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    isUpdate = prefs.getBool('updateBen');
+    if (isUpdate == null) {
+      isUpdate = false;
+    }
+  }
 
   @override
   void initState () {
     super.initState();
     _listen();
+    _isUpdate();
     getNumber();
     _validate();
     _beneficiaries();
