@@ -24,6 +24,17 @@ class _PinCodeState extends State<PinCode> {
     print("Set");
   }
 
+  bool? redirect;
+
+  void _checkRedirect() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    redirect = prefs.getBool('redirect');
+    if (redirect == null)
+    {
+      redirect = false;
+    }
+  }
+
   bool isError = false;
   String errorText = '';
 
@@ -37,7 +48,6 @@ class _PinCodeState extends State<PinCode> {
 
   @override
   void dispose () {
-    super.dispose();
     setState(() {
       errorText = '';
       isError = false;
@@ -49,6 +59,13 @@ class _PinCodeState extends State<PinCode> {
         '',
       ];
     });
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkRedirect();
   }
 
   @override
@@ -167,7 +184,12 @@ class _PinCodeState extends State<PinCode> {
                             });
                           }
                           _setUp();
-                          Navigator.pushReplacementNamed(context, '/vaccine');
+                          if (redirect == false) {
+                            Navigator.pushReplacementNamed(context, '/vaccine');
+                          }
+                          else if (redirect == true) {
+                            Navigator.pushReplacementNamed(context, '/home');
+                          }
                         }
                       },
                       child: Text(

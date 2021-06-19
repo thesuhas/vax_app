@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vax_app/widgets/bencard.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -12,6 +13,10 @@ class _HomeState extends State<Home> {
 
   bool isChecked = false;
 
+  void _redirect() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('redirect', true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +63,7 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   onTap: () {
+                    _redirect();
                     Navigator.pushReplacementNamed(context, '/pincode');
                   },
                 ),

@@ -8,9 +8,9 @@ class Vaccine extends StatefulWidget {
 class _VaccineState extends State<Vaccine> {
 
   List<String> vaccines = [
+    'ANY',
     'COVAXIN',
     'COVISHIELD',
-    'SPUTNIK'
   ];
 
   String? _vaccine;
@@ -18,9 +18,6 @@ class _VaccineState extends State<Vaccine> {
 
   @override
   void dispose() {
-    setState(() {
-      chosen = true;
-    });
     super.dispose();
   }
 
