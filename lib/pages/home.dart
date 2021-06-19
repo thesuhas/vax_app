@@ -109,8 +109,33 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   onTap: () {
-                    _redirect();
-                    Navigator.pushReplacementNamed(context, '/pincode');
+                    if (!_checkBool(widget._booking)) {
+                      _redirect();
+                      Navigator.pushReplacementNamed(context, '/pincode');
+                    }
+                    else {
+                      showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Booking in Progress'),
+                              content: const Text('Cannot change Pincode during Booking'),
+                              actions: <Widget>[
+                            TextButton(
+                            onPressed: () {
+                                  Navigator.of(context).pop();
+                            },
+                              child: Text(
+                                "OK",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            )
+                    ],
+                            backgroundColor: Colors.amberAccent[200],
+                    )
+                    );
+                    }
                   },
                 ),
                 decoration: BoxDecoration(
@@ -129,7 +154,32 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, '/vaccine');
+                    if (!_checkBool(widget._booking)) {
+                      Navigator.pushReplacementNamed(context, '/vaccine');
+                    }
+                    else {
+                      showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Booking in Progress'),
+                            content: const Text('Cannot change Vaccine Preference during Booking'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  "OK",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              )
+                            ],
+                            backgroundColor: Colors.amberAccent[200],
+                          )
+                      );
+                    }
                   },
                 ),
                 decoration: BoxDecoration(
