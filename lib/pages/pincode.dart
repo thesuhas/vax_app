@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vax_app/widgets/dropdown_otp.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PinCode extends StatefulWidget {
-  const PinCode({Key? key}) : super(key: key);
 
   @override
   _PinCodeState createState() => _PinCodeState();
@@ -10,22 +10,17 @@ class PinCode extends StatefulWidget {
 
 class _PinCodeState extends State<PinCode> {
 
-  //Map data = {};
-  List<String> pincodes = [
-    '50001',
-    '50002',
-    '50003',
-    '50004',
-    '50005',
-  ];
+  void _setUp () async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isSetUp', true);
+    print("Set");
+  }
 
-  List<String?> selected = [
-    null,
-    null,
-    null,
-    null,
-    null,
-  ];
+  String? chosen1;
+  String? chosen2;
+  String? chosen3;
+  String? chosen4;
+  String? chosen5;
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +41,79 @@ class _PinCodeState extends State<PinCode> {
       backgroundColor: Colors.grey[900],
       body: Center(
         child: Container(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.fromLTRB(20, 30, 20, 20),
           child: ListView(
               children: <Widget>[
-                DropDownOTP(),
+                Center(
+                  child: Text(
+                    "Choose Preferred OTPs",
+                    style: TextStyle(
+                      color: Colors.amberAccent[200],
+                      letterSpacing: 5,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20,),
+                DropDownOTP(
+                  onValueSelected: (value) {
+                    setState(() {
+                      chosen1 = value;
+                    });
+                  }
+                ),
+                DropDownOTP(
+                  onValueSelected: (value) {
+                    setState(() {
+                      chosen2 = value;
+                    });
+                  },
+                ),
+                DropDownOTP(
+                  onValueSelected: (value) {
+                    setState(() {
+                      chosen3 = value;
+                    });
+                  },
+                ),
+                DropDownOTP(
+                  onValueSelected: (value) {
+                    setState(() {
+                      chosen4 = value;
+                    });
+                  },
+                ),
+                DropDownOTP(
+                  onValueSelected: (value) {
+                    setState(() {
+                      chosen5 = value;
+                    });
+                  },
+                ),
+                SizedBox(height: 40,),
+                Center(
+                  child: Container(
+                    width: 100,
+                    child: TextButton(
+                      onPressed: () {
+                        print("Chosen Pincodes: $chosen1, $chosen2, $chosen3, $chosen4, $chosen5");
+                        _setUp();
+                        Navigator.pushReplacementNamed(context, '/home');
+                      },
+                      child: Text(
+                        "Submit"
+                      ),
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.amberAccent[200],
+                        primary: Colors.black,
+                        textStyle: TextStyle(
+                          letterSpacing: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
         ),

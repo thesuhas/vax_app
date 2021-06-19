@@ -19,7 +19,6 @@
     Future _save(String number) async{
       SharedPreferences pref = await SharedPreferences.getInstance();
       pref.setString('phoneNumber', number);
-      pref.setBool('isSetUp', true);
     }
 
     Future _check() async {
