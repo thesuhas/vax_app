@@ -63,23 +63,23 @@ class Beneficiary{
   late bool? isDoseOneDone;
   late String? vaccine;
   late String? doseOneDate;
+  late bool? isDoseTwoDone;
+  late bool? bookedSlot;
 
   Beneficiary( {
     this.beneficiaryId = 0,
     this.isDoseOneDone = false,
+    this.isDoseTwoDone = false,
     this.isOld = false,
     this.wantFree = false,
     this.vaccine = 'any',
     this.doseOneDate,
     this.isEnabled = true,
+    this.bookedSlot = false,
   } );
 
   void setWantFree() {
     wantFree = true;
-  }
-
-  void setVaccine(String vac){
-    vaccine = vac.toUpperCase();
   }
 
   void toggle(){
@@ -101,6 +101,8 @@ class Beneficiary{
     mapBen['vaccine'] = vaccine;
     mapBen['doseOneDate'] = doseOneDate;
     mapBen['isEnabled'] = isEnabled;
+    mapBen['isDoseTwoDone'] = isDoseTwoDone;
+    mapBen['bookedSlot'] = bookedSlot;
     return jsonEncode(mapBen);
   }
 
@@ -114,6 +116,8 @@ class Beneficiary{
     vaccine = mapBen['vaccine'].toString();
     doseOneDate = mapBen['doseOneDate'].toString();
     isEnabled = mapBen['isEnabled'].toString() == 'true';
+    isDoseTwoDone = mapBen['isDoseTwoDone'].toString() == 'true';
+    bookedSlot = mapBen['bookedSlot'].toString() == 'true';
   }
 
 }
