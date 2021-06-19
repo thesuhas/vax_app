@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vax_app/services/script.dart';
 import 'package:telephony/telephony.dart';
 import 'package:flutter/services.dart';
+import 'package:location/location.dart';
 
 backgroundMessageHandler(SmsMessage message) async {
   //Handle background message
@@ -61,13 +62,31 @@ class _LoadingDataState extends State<LoadingData> {
       print("entered");
       //print(isBen);
       aut.beneficiaries();
-      Future.delayed(Duration(seconds: 1), () {
-        Navigator.pushReplacementNamed(context, '/home', arguments: {
-          'beneficiaries': aut.ben,
-        });
-      });
+      Navigator.pushReplacementNamed(context, '/pincode');
     });
   }
+
+  void _location() async {
+    Location location = new Location();
+    LocationData _location;
+    // Get service if necessary
+    bool _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      print("Location Service: $_serviceEnabled");
+    }
+    // Permissions
+    PermissionStatus _permissionsGranted = await location.hasPermission();
+    if (_permissionsGranted == PermissionStatus.denied) {
+      _permissionsGranted = await location.requestPermission();
+      print("Permissions: $_permissionsGranted");
+    }
+
+    // Get the location
+    _location = await location.getLocation();
+    print("Location: $_location");
+  }
+
 
   @override
   void initState () {
@@ -76,6 +95,7 @@ class _LoadingDataState extends State<LoadingData> {
     getNumber();
     _validate();
     _beneficiaries();
+    _location();
   }
 
   @override

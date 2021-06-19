@@ -33,7 +33,6 @@
       pref.clear();
     }
 
-
     // Function to clear field on disposing widget
     @override
     void dispose() {
@@ -46,12 +45,13 @@
     //_clear();
   }
 
+
     @override
     Widget build(BuildContext context) {
       return Scaffold(
         appBar: AppBar(
           title: Text(
-            "VaxApp",
+            "CoVaccine",
             style: TextStyle(
               color: Colors.amberAccent[200],
             ),

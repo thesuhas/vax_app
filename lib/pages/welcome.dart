@@ -7,7 +7,7 @@ class Welcome extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            "VaxApp",
+            "CoVaccine",
             style: TextStyle(
               color: Colors.amberAccent[200],
             ),
@@ -33,7 +33,7 @@ class Welcome extends StatelessWidget {
                 width: 120,
                 child: TextButton.icon(
                   onPressed: (){
-                    Navigator.pushReplacementNamed(context, '/setup');
+                    Navigator.pushReplacementNamed(context, '/disclaimer');
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.amberAccent[200],

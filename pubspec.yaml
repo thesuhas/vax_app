@@ -37,7 +37,7 @@ dev_dependencies:
   crypto: ^3.0.1
   shared_preferences: ^2.0.6
   telephony: ^0.1.4
-  pin_code_fields: ^7.2.0
+  location: ^4.2.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

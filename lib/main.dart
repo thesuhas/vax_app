@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:vax_app/pages/disclaimer.dart';
+import 'package:vax_app/pages/vaccine.dart';
 import 'package:vax_app/pages/welcome.dart';
 import 'package:vax_app/pages/setup.dart';
 import 'package:vax_app/pages/home.dart';
 import 'package:vax_app/pages/loading.dart';
+import 'package:vax_app/pages/pincode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.clear();
+  //prefs.clear();
   bool? isSetUp = prefs.getBool('isSetUp');
   //print(isSetUp);
   String initialRoute;
@@ -27,8 +30,12 @@ void main() async{
       '/welcome': (context) => Welcome(),
       '/setup': (context) => Setup(),
       '/home': (context) => Home(),
+      '/pincode': (context) => PinCode(),
       '/loading': (context) => LoadingData(),
+      '/disclaimer': (context) => Disclaimer(),
+      '/vaccine': (context) => Vaccine(),
     },
+    debugShowCheckedModeBanner: false,
   ));
 }
 
