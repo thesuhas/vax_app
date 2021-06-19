@@ -36,6 +36,22 @@ class _PinCodeState extends State<PinCode> {
   ];
 
   @override
+  void dispose () {
+    super.dispose();
+    setState(() {
+      errorText = '';
+      isError = false;
+      chosen = [
+        '',
+        '',
+        '',
+        '',
+        '',
+      ];
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     // data = data.isNotEmpty ? data : ModalRoute.of(context)!.settings.arguments as Map;
     // print(data);

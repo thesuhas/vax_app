@@ -12,6 +12,7 @@ class _HomeState extends State<Home> {
 
   bool isChecked = false;
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,6 +59,25 @@ class _HomeState extends State<Home> {
                   ),
                   onTap: () {
                     Navigator.pushReplacementNamed(context, '/pincode');
+                  },
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.amberAccent[200],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.all(10),
+                child: ListTile(
+                  title: Text(
+                    "Change Vaccine",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, '/vaccine');
                   },
                 ),
                 decoration: BoxDecoration(

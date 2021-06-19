@@ -14,7 +14,15 @@ class _VaccineState extends State<Vaccine> {
   ];
 
   String? _vaccine;
-  bool chosen = false;
+  bool chosen = true;
+
+  @override
+  void dispose() {
+    setState(() {
+      chosen = true;
+    });
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
