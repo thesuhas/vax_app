@@ -3,13 +3,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vax_app/services/script.dart';
 import 'package:telephony/telephony.dart';
 import 'package:flutter/services.dart';
+import 'package:vax_app/services/store_data.dart';
 import 'package:location/location.dart';
+import 'package:vax_app/services/front_end_calls.dart';
 
-backgroundMessageHandler(SmsMessage message) async {
-  //Handle background message
-  String? text = message.body;
-  print("In handler:  $text");
-}
+// backgroundMessageHandler(SmsMessage message) async {
+//   //Handle background message
+//   String? text = message.body;
+//   print("In handler:  $text");
+// }
 
 class LoadingData extends StatefulWidget {
   @override
@@ -21,49 +23,54 @@ class _LoadingDataState extends State<LoadingData> {
   String? number = '';
   String? otp = '';
 
-  Automate aut = Automate(sessionId: "", slots: [""], centerId: "");
+  FrontEndCalls frontEndCalls = FrontEndCalls();
+
+  StoreData storeData = StoreData();
+
+  //Automate aut = Automate(sessionId: "", slots: [""], centerId: "");
 
   final telephony = Telephony.instance;
 
   bool? isUpdate;
 
-  void getNumber() async {
-    // Get Shared Preferences to extract Data
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      number = prefs.getString('phoneNumber');
-    });
-    // Create telephony instance to listen for phone number
-  }
+  // void getNumber() async {
+  //   // Get Shared Preferences to extract Data
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     number = prefs.getString('phoneNumber');
+  //   });
+  //   // Create telephony instance to listen for phone number
+  // }
 
-  void _listen() async {
-    bool? permissionsGranted = await telephony.requestSmsPermissions;
-    telephony.listenIncomingSms(
-      onNewMessage: (message) {
-        String? text = message.body?.substring(37, 43);
-        setState(() {
-          otp = text;
-        });
-      },
-      onBackgroundMessage: backgroundMessageHandler,
-      listenInBackground: true,
-    );
-  }
+  // void _listen() async {
+  //   bool? permissionsGranted = await telephony.requestSmsPermissions;
+  //   telephony.listenIncomingSms(
+  //     onNewMessage: (message) {
+  //       String? text = message.body?.substring(37, 43);
+  //       setState(() {
+  //         otp = text;
+  //       });
+  //     },
+  //     onBackgroundMessage: backgroundMessageHandler,
+  //     listenInBackground: true,
+  //   );
+  // }
 
-  void _validate() async {
-    String? txnId =  await aut.automateOtp();
-    Future.delayed(Duration(seconds: 5), () {
-      aut.automateSteps(txnId, otp);
-    });
-  }
+  // void _validate() async {
+  //   String? txnId =  await aut.automateOtp();
+  //   Future.delayed(Duration(seconds: 5), () {
+  //     aut.automateSteps(txnId, otp);
+  //   });
+  // }
 
   void _beneficiaries() async {
+    storeData.getAndSaveData();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? isBen = prefs.getBool('isBen');
-    Future.delayed(Duration(seconds: 6), () {
+    Future.delayed(Duration(seconds: 7), () {
       print("entered");
       //print(isBen);
-      aut.beneficiaries();
+      // aut.beneficiaries();
       if (isUpdate == true) {
         Navigator.pushReplacementNamed(context, '/home');
       }
@@ -72,6 +79,7 @@ class _LoadingDataState extends State<LoadingData> {
       }
     });
   }
+
 
   void _location() async {
     Location location = new Location();
@@ -91,7 +99,8 @@ class _LoadingDataState extends State<LoadingData> {
 
     // Get the location
     _location = await location.getLocation();
-    print("Location: $_location");
+
+    await frontEndCalls.getPincodeList(double.parse(_location.latitude.toString()), double.parse(_location.longitude.toString()));
   }
 
   void _isUpdate() async {
@@ -105,12 +114,12 @@ class _LoadingDataState extends State<LoadingData> {
   @override
   void initState () {
     super.initState();
-    _listen();
+    //_listen();
     _isUpdate();
-    getNumber();
-    _validate();
-    _beneficiaries();
+    // getNumber();
+    // _validate();
     _location();
+    _beneficiaries();
   }
 
   @override

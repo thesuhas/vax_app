@@ -3,8 +3,17 @@ import 'package:http/http.dart';
 import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vax_app/services/localdata.dart';
+import 'package:telephony/telephony.dart';
+
+backgroundMessageHandler(SmsMessage message) async {
+  //Handle background message
+  String? text = message.body;
+  print("In handler:  $text");
+}
 
 class ApiCalls {
+
+  final telephony = Telephony.instance;
 
   // Class Attributes
   Map<String, String> headers = {
@@ -17,6 +26,22 @@ class ApiCalls {
   late String? txnId;
   late String? token;
   late List<dynamic>? benList;
+  late String otp;
+
+  void _listen() async {
+    bool? permissionsGranted = await telephony.requestSmsPermissions;
+    telephony.listenIncomingSms(
+      onNewMessage: (message) {
+        String? text = message.body?.substring(37, 43);
+        if (text == null) {
+          text = '';
+        }
+        otp = text;
+      },
+      onBackgroundMessage: backgroundMessageHandler,
+      listenInBackground: true,
+    );
+  }
 
 
   // Class methods
@@ -83,11 +108,12 @@ class ApiCalls {
     if (response.statusCode == 200) {
       var resp = jsonDecode(response.body);
       txnId = resp['txnId'];
+      print(txnId);
     }
   }
 
   Future<void> validateOtp(String otp, {int counter = 0}) async {
-    await Future.delayed(Duration(seconds: 3));
+    //await Future.delayed(Duration(seconds: 5));
     String url = 'https://cdn-api.co-vin.in/api/v2/auth/validateMobileOtp';
     Digest encodedOtp = sha256.convert(utf8.encode(otp));
     Object? data = {
@@ -159,10 +185,12 @@ class ApiCalls {
 
   // Shortcut functions
   Future<void> setToken() async {
+    _listen();
     await getOtp();
-    //TODO: Auto read from messages and assign to otp variable
-    String otp;
-    await validateOtp('otp');
+    Future.delayed(Duration(seconds: 5), () async {
+      await validateOtp(otp);
+    });
+
   }
 
 

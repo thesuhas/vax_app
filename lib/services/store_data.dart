@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vax_app/services/cowin_api_calls.dart';
 import 'package:vax_app/services/localdata.dart';
@@ -14,9 +15,7 @@ class StoreData{
     // 3. When user clicks "Refresh Beneficiary List" or something equivalent
 
     ApiCalls apiCalls = ApiCalls();
-    await apiCalls.getOtp();
-    //TODO: Fetch from SMS
-    await apiCalls.validateOtp('otp');
+    await apiCalls.setToken();
     await apiCalls.getBen();
     List<dynamic>? benList = apiCalls.benList;
     if(benList == null){
@@ -29,7 +28,6 @@ class StoreData{
 
   // Supporting function. NOT TO BE CALLED SEPARATELY!
   Future<void> saveData(dynamic eachBen) async {
-
     // Set Beneficiary Object
     Beneficiary beneficiary = Beneficiary();
     beneficiary.beneficiaryId = int.parse(eachBen['beneficiary_reference_id']);
@@ -62,8 +60,6 @@ class StoreData{
     benList.add(benStr);
     prefs.setStringList('benList', benList);
     print("EVERYTHING WORKED NAKKAN");
-
-
   }
 
   // Supporting function. NOT TO BE CALLED SEPARATELY!

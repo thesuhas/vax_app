@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vax_app/widgets/dropdown_otp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vax_app/services/front_end_calls.dart';
 
 class PinCode extends StatefulWidget {
 
@@ -10,13 +11,8 @@ class PinCode extends StatefulWidget {
 
 class _PinCodeState extends State<PinCode> {
 
-  List<String> pincodes = [
-    '50001',
-    '50002',
-    '50003',
-    '50004',
-    '50005',
-  ];
+  List<String>? pincodes;
+
 
   void _setUp () async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -35,6 +31,21 @@ class _PinCodeState extends State<PinCode> {
     }
   }
 
+  List<String> _nullPincodes(List<String>? pincodes) {
+    if (pincodes == null || pincodes.length == 0)
+      {
+        pincodes = [];
+      }
+    return pincodes;
+  }
+
+  void _getPincodes() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      pincodes = prefs.getStringList('possiblePins');
+    });
+  }
+
   bool isError = false;
   String errorText = '';
 
@@ -46,6 +57,8 @@ class _PinCodeState extends State<PinCode> {
     '',
   ];
 
+  FrontEndCalls frontEndCalls = FrontEndCalls();
+
   @override
   void dispose () {
     super.dispose();
@@ -55,6 +68,7 @@ class _PinCodeState extends State<PinCode> {
   void initState() {
     super.initState();
     _checkRedirect();
+    _getPincodes();
   }
 
   @override
@@ -97,7 +111,7 @@ class _PinCodeState extends State<PinCode> {
                       chosen[0] = value;
                     });
                   },
-                  pincodes: pincodes,
+                  pincodes: _nullPincodes(pincodes),
                 ),
                 DropDownOTP(
                   onValueSelected: (value) {
@@ -105,7 +119,7 @@ class _PinCodeState extends State<PinCode> {
                       chosen[1] = value;
                     });
                   },
-                  pincodes: pincodes,
+                  pincodes: _nullPincodes(pincodes),
                 ),
                 DropDownOTP(
                   onValueSelected: (value) {
@@ -113,7 +127,7 @@ class _PinCodeState extends State<PinCode> {
                       chosen[2] = value;
                     });
                   },
-                  pincodes: pincodes,
+                  pincodes: _nullPincodes(pincodes),
                 ),
                 DropDownOTP(
                   onValueSelected: (value) {
@@ -121,7 +135,7 @@ class _PinCodeState extends State<PinCode> {
                       chosen[3] = value;
                     });
                   },
-                  pincodes: pincodes,
+                  pincodes: _nullPincodes(pincodes),
                 ),
                 DropDownOTP(
                   onValueSelected: (value) {
@@ -129,7 +143,7 @@ class _PinCodeState extends State<PinCode> {
                       chosen[4] = value;
                     });
                   },
-                  pincodes: pincodes,
+                  pincodes: _nullPincodes(pincodes),
                 ),
                 Center(
                   child: Container(
@@ -172,6 +186,7 @@ class _PinCodeState extends State<PinCode> {
                               isError = false;
                             });
                           }
+
                           _setUp();
                           if (redirect == false) {
                             Navigator.pushReplacementNamed(context, '/vaccine');
