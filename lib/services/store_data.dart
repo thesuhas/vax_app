@@ -33,7 +33,7 @@ class StoreData{
     // Set Beneficiary Object
     Beneficiary beneficiary = Beneficiary();
     beneficiary.beneficiaryId = int.parse(eachBen['beneficiary_reference_id']);
-    if(2021 - int.parse(eachBen['birth_year']) > 44){
+    if(2021 - int.parse(eachBen['birth_year']) < 44){
       beneficiary.isYoung = true;
     }
     String vaccinationStatus = eachBen['vaccination_status'];
