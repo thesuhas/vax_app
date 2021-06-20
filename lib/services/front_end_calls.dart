@@ -4,7 +4,7 @@ import 'package:vax_app/services/localdata.dart';
 
 class FrontEndCalls{
 
-
+  // Returns a list of pincodes with the given latitude and longitude received from the Location API
   Future<List<int>> getPincodeList(double lat, double long) async{
     ApiCalls apiCalls = ApiCalls();
     List<dynamic> centersList = await apiCalls.getCenters(lat, long);
@@ -18,6 +18,7 @@ class FrontEndCalls{
     return pincodeList;
   }
 
+  // Sets the pincode list in the user object stored in local storage to the user's choices of pincodes
   Future<void> setPincodeList(List<int> pinList) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String strUser = prefs.getString('user').toString();
@@ -25,6 +26,14 @@ class FrontEndCalls{
     user.setPinList(pinList);
     String strUserNew = user.saveUser();
     prefs.setString('user', strUserNew);
+  }
+
+  // Sets the phone number of the user to the user object in local storage
+  Future<void> setPhoneNumber(int phNo) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    User user = User(phNo: phNo);
+    String strUser = user.saveUser();
+    prefs.setString('user', strUser);
   }
 
 }

@@ -4,7 +4,6 @@ import 'package:vax_app/services/localdata.dart';
 
 class StoreData{
 
-  StoreData();
 
   Future<void> getAndSaveData() async {
 
@@ -28,6 +27,7 @@ class StoreData{
     });
   }
 
+  // Supporting function. NOT TO BE CALLED SEPARATELY!
   Future<void> saveData(dynamic eachBen) async {
 
     // Set Beneficiary Object
@@ -66,6 +66,7 @@ class StoreData{
 
   }
 
+  // Supporting function. NOT TO BE CALLED SEPARATELY!
   List<String> removeIfExists(List<String> benList, Beneficiary beneficiary){
     benList.forEach((element) {
       Beneficiary checkBeneficiary = getBen(element);
@@ -79,7 +80,7 @@ class StoreData{
 }
 
 
-
+// Made these in case we need to set or get data to and from the local storage
 Future<List<String>> getBenListFromPrefs() async {
   SharedPreferences pref = await SharedPreferences.getInstance();
   List<String>? benList = pref.getStringList('benList');

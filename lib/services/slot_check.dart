@@ -6,23 +6,41 @@ class SlotCheck{
 
   List<String> benList;
   User user;
+  late ApiCalls apiCalls;
+  late List<int> pincodeList;
 
   SlotCheck( {
     required this.benList,
-    required this.user
+    required this.user,
 } );
 
-  Future<void> initialise() async {
-    await getUserObj();
-    await getBeneficiaryList();
+  // Supporting function. NOT TO BE CALLED SEPARATELY!
+  // Sets this object with the beneficiary list from local storage
+  Future<void> setBeneficiaryList() async {
+    benList = await getBenListFromPrefs();
   }
 
-  dynamic slotCheck() async {
-    ApiCalls apiCalls = ApiCalls();
-    List<int>? pincodeList = user.pinList;
-    if(pincodeList == null){
-      pincodeList = [];
+  // Supporting function. NOT TO BE CALLED SEPARATELY!
+  // Sets this object with the user details from local storage
+  Future<void> setUserObj() async {
+    String userStr = await getUserFromPrefs();
+    user = getUser(userStr);
+  }
+
+  // This function must be called once after which the slotCheck function can be called
+  Future<void> initialise() async {
+    await setUserObj();
+    await setBeneficiaryList();
+    apiCalls = ApiCalls();
+    List<int>? pList = user.pinList;
+    if(pList == null){
+      pList = [];
     }
+    pincodeList = pList;
+  }
+
+  // This is the function that must run in the background
+  dynamic slotCheck() async {
     List<dynamic> centers = await apiCalls.centers(pincodeList);
     if(user.wantFree == true){
       centers = filterFree(centers);
@@ -57,6 +75,9 @@ class SlotCheck{
     });
   }
 
+  // Supporting function. NOT TO BE CALLED SEPARATELY!
+  // This function checks each beneficiary's unique data and filters out the incoming list of centers
+  // according to it's requirements
   List<dynamic> distribute(Beneficiary benObj, List<dynamic> centers) {
     if(benObj.isEnabled == true && benObj.bookedSlot == false){
       if(benObj.isYoung == true){
@@ -87,6 +108,8 @@ class SlotCheck{
     }
   }
 
+  // Supporting function. NOT TO BE CALLED SEPARATELY!
+  // Returns the dose number of a particular beneficiary
   int getDose(Beneficiary beneficiary){
     if(beneficiary.isDoseOneDone == false){
       return 1;
@@ -96,6 +119,8 @@ class SlotCheck{
     }
   }
 
+  // Supporting function. NOT TO BE CALLED SEPARATELY!
+  // Returns centers which provide vaccine for free
   List<dynamic> filterFree(List<dynamic> centers) {
     List newCenters = [];
     centers.forEach((ctr) {
@@ -106,6 +131,8 @@ class SlotCheck{
     return newCenters;
   }
 
+  // Supporting function. NOT TO BE CALLED SEPARATELY!
+  // Returns centers which provide vaccine for ages 18 and above
   List<dynamic> filterYoung(List<dynamic> centers) {
     List newCenters = [];
     centers.forEach((ctr) {
@@ -116,6 +143,8 @@ class SlotCheck{
     return newCenters;
   }
 
+  // Supporting function. NOT TO BE CALLED SEPARATELY!
+  // Returns centers which provide a particular vaccine only
   List<dynamic> filterVaccine(List<dynamic> centers, String vaccine){
     List<dynamic> newCenters = [];
     if(vaccine == 'COVISHIELD'){
@@ -140,6 +169,8 @@ class SlotCheck{
 
   }
 
+  // Supporting function. NOT TO BE CALLED SEPARATELY!
+  // Checks if a dose one vaccinated beneficiary is eligible for dose two
   bool validDueDate(String dueDate, String vaccine){
     DateTime now = DateTime.now();
     List dmyList = vaccine.split('-');
@@ -151,19 +182,6 @@ class SlotCheck{
       // For COVAXIN
       return doseOneDate.isAfter(now.add(Duration(days: 21)));
     }
-  }
-
-
-
-
-
-  Future<void> getBeneficiaryList() async {
-    benList = await getBenListFromPrefs();
-  }
-
-  Future<void> getUserObj() async {
-    String userStr = await getUserFromPrefs();
-    user = getUser(userStr);
   }
 
 
