@@ -12,13 +12,15 @@ class PinCode extends StatefulWidget {
 class _PinCodeState extends State<PinCode> {
 
   List<String>? pincodes;
+  
+  FrontEndCalls frontEndCalls = FrontEndCalls();
 
 
-  void _setUp () async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isSetUp', true);
-    print("Set");
-  }
+  // void _setUp () async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   //prefs.setBool('isSetUp', true);
+  //   //print("Set");
+  // }
 
   bool? redirect;
 
@@ -45,6 +47,20 @@ class _PinCodeState extends State<PinCode> {
       pincodes = prefs.getStringList('possiblePins');
     });
   }
+  
+  List<String> _convert(List<String?> chosen) {
+    List<String> converted = [];
+    chosen.forEach((element) { 
+      if (element != '' && element != null) {
+        converted.add(element);
+      }
+    });
+    if (converted.length == 0) {
+      return [];
+    }
+    return converted;
+  }
+  
 
   bool isError = false;
   String errorText = '';
@@ -56,9 +72,7 @@ class _PinCodeState extends State<PinCode> {
     '',
     '',
   ];
-
-  FrontEndCalls frontEndCalls = FrontEndCalls();
-
+  
   @override
   void dispose () {
     super.dispose();
@@ -186,8 +200,9 @@ class _PinCodeState extends State<PinCode> {
                               isError = false;
                             });
                           }
-
-                          _setUp();
+                          // Saving pincodes
+                          frontEndCalls.setPincodeList(_convert(chosen));
+                          //_setUp();
                           if (redirect == false) {
                             Navigator.pushReplacementNamed(context, '/vaccine');
                           }

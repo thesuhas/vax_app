@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:vax_app/services/localdata.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Vaccine extends StatefulWidget {
   @override
@@ -15,10 +17,40 @@ class _VaccineState extends State<Vaccine> {
 
   String? _vaccine;
   bool chosen = true;
+  late User user;
+  late List<Beneficiary> beneficiary;
+
+  Future<void> _loadUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? _user = prefs.getString('user').toString();
+    user = getUser(_user);
+    List<String>? ben = prefs.getStringList('benList');
+    if (ben == null) {
+      ben = [];
+    }
+    ben.forEach((element) {
+      beneficiary.add(getBen(element));
+    });
+  }
+
+  void save(String? vaccine) {
+    beneficiary.forEach((element) {
+      if (element.isDoseOneDone == false) {
+        element.vaccine = vaccine;
+      }
+    });
+  }
+
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  @override
+  void initState() async {
+    super.initState();
+    await _loadUser();
   }
 
   @override
@@ -121,6 +153,7 @@ class _VaccineState extends State<Vaccine> {
                        setState(() {
                          chosen = true;
                        });
+
                        print("Chosen Vaccine: $_vaccine");
                        Navigator.pushReplacementNamed(context, '/home');
                      }

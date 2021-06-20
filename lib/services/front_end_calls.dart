@@ -20,13 +20,18 @@ class FrontEndCalls{
   }
 
   // Sets the pincode list in the user object stored in local storage to the user's choices of pincodes
-  Future<void> setPincodeList(List<int> pinList) async {
+  Future<void> setPincodeList(List<String> pinList) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String strUser = prefs.getString('user').toString();
     User user = getUser(strUser);
-    user.setPinList(pinList);
+    List<int> pinSave = [];
+    pinList.forEach((element) {
+      pinSave.add(int.parse(element));
+    });
+    user.setPinList(pinSave);
     String strUserNew = user.saveUser();
     prefs.setString('user', strUserNew);
+    print("Saved $pinSave");
   }
 
   // Sets the phone number of the user to the user object in local storage
