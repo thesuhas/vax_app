@@ -18,9 +18,40 @@ class ApiCalls {
   late String? token;
   late List<dynamic>? benList;
 
-  ApiCalls({this.txnId, this.token});
 
   // Class methods
+
+  Future<List<dynamic>> centers(List<int> pincodeList) async {
+    DateTime tomorrowDate = DateTime.now().add(Duration(days: 1));
+    String tomorrow = "${tomorrowDate.day}-${tomorrowDate.month}-${tomorrowDate.year}";
+    DateTime dayAfterDate = DateTime.now().add(Duration(days: 2));
+    String dayAfter = "${dayAfterDate.day}-${dayAfterDate.month}-${dayAfterDate.year}";
+    List<String> dateList = [tomorrow, dayAfter];
+    List<dynamic> sessions = [];
+    await Future.forEach((dateList), (date) async{
+      await Future.forEach(pincodeList, (pincode) async {
+        String url = 'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=$pincode&date=$date';
+        Response response = await get(
+            Uri.parse(url),
+            headers: headers
+        );
+        if(response.statusCode == 200){
+          var resp = jsonDecode(response.body);
+          sessions.add(resp['sessions']);
+        }
+      });
+    });
+    List<dynamic> centers = [];
+    sessions.forEach((centersList) {
+      centersList.forEach((center) {
+        if(center['available_capacity'] > 9){
+          centers.add(center);
+        }
+      });
+    });
+    return centers;
+  }
+
 
   Future<dynamic> getCenters(double lat, double long) async {
     String url = 'https://cdn-api.co-vin.in/api/v2/appointment/centers/public/findByLatLong?lat=$lat&long=$long';
@@ -103,6 +134,27 @@ class ApiCalls {
       Map<String, dynamic> benJson = jsonDecode(response.body);
       benList = benJson['beneficiaries'];
     }
+  }
+
+  Future<Map<int, String>> schedule(int dose, String sessionId, String slot, int centerId, List<int> beneficiaries) async {
+    await setToken();
+    String url = 'https://cdn-api.co-vin.in/api/v2/appointment/schedule';
+    Object? data = {
+      'dose': dose,
+      'session_id': sessionId,
+      'slot': slot,
+      'beneficiaries': beneficiaries,
+      'center_id': centerId
+    };
+    Response response = await post(
+      Uri.parse(url),
+      headers: headers,
+      body: jsonEncode(data),
+    );
+    Map<int, String> ret = {};
+    ret[response.statusCode] = response.body;
+    return ret;
+
   }
 
   // Shortcut functions

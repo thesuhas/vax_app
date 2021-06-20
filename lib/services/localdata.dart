@@ -4,37 +4,33 @@ class User{
   late int? phNo;
   late List<int>? pinList;
   late bool? isSetup;
-  late bool? autoBook;
+  late bool? wantFree;
 
   User( {
     this.phNo = 0,
     this.isSetup = false,
     this.pinList,
-    this.autoBook = true,
+    this.wantFree = false,
   } );
 
-  // Set boolean to check if user has setup phone number
+  // Set boolean to true after he is done setting up
   void setSetup() {
     isSetup = true;
   }
 
-  // Set district ID for the given phone number
+  // Set pincode list for the given phone number
   void setPinList(List<int> pList) {
     pinList = pList;
   }
 
-  // Set the autoBook flag to false
-  void disableAutoBook() {
-    autoBook = false;
-  }
 
   // Encode to string to save to SharedPreferences
   String saveUser() {
     Map<String, dynamic> mapUser = {};
     mapUser['phNo'] = phNo;
-    mapUser['districtId'] = pinList;
+    mapUser['pinList'] = pinList;
     mapUser['isSetup'] = isSetup;
-    mapUser['autoBook'] = autoBook;
+    mapUser['wantFree'] = wantFree;
     return jsonEncode(mapUser);
   }
 
@@ -44,8 +40,8 @@ class User{
     phNo = int.parse(mapUser['phNo'].toString());
     try {
       isSetup = mapUser['isSetup'].toString() == 'true';
-      autoBook = mapUser['autoBook'].toString() == 'true';
-      pinList = mapUser['districtId'];
+      pinList = mapUser['pinList'];
+      wantFree = mapUser['wantFree'];
     }
     catch(e){
       return;
@@ -58,8 +54,7 @@ class User{
 class Beneficiary{
   late int? beneficiaryId;
   late bool? isEnabled;
-  late bool? wantFree;
-  late bool? isOld;
+  late bool? isYoung;
   late bool? isDoseOneDone;
   late String? vaccine;
   late String? doseOneDate;
@@ -70,17 +65,13 @@ class Beneficiary{
     this.beneficiaryId = 0,
     this.isDoseOneDone = false,
     this.isDoseTwoDone = false,
-    this.isOld = false,
-    this.wantFree = false,
-    this.vaccine = 'any',
+    this.isYoung = true,
+    this.vaccine = 'ANY',
     this.doseOneDate,
     this.isEnabled = true,
     this.bookedSlot = false,
   } );
 
-  void setWantFree() {
-    wantFree = true;
-  }
 
   void toggle(){
     if(isEnabled == true){
@@ -96,8 +87,7 @@ class Beneficiary{
     Map<String,dynamic> mapBen = {};
     mapBen['beneficiaryId'] = beneficiaryId;
     mapBen['isDoseOneDone'] = isDoseOneDone;
-    mapBen['wantFree'] = wantFree;
-    mapBen['isOld'] = isOld;
+    mapBen['isYoung'] = isYoung;
     mapBen['vaccine'] = vaccine;
     mapBen['doseOneDate'] = doseOneDate;
     mapBen['isEnabled'] = isEnabled;
@@ -111,8 +101,7 @@ class Beneficiary{
     Map<String,dynamic> mapBen = json.decode(strBen);
     beneficiaryId = int.parse(mapBen['beneficiaryId'].toString());
     isDoseOneDone = mapBen['isDoseOneDone'].toString() == 'true';
-    wantFree = mapBen['wantFree'].toString() == 'true';
-    isOld = mapBen['isOld'].toString() == 'true';
+    isYoung = mapBen['isYoung'].toString() == 'true';
     vaccine = mapBen['vaccine'].toString();
     doseOneDate = mapBen['doseOneDate'].toString();
     isEnabled = mapBen['isEnabled'].toString() == 'true';

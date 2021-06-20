@@ -34,7 +34,7 @@ class StoreData{
     Beneficiary beneficiary = Beneficiary();
     beneficiary.beneficiaryId = int.parse(eachBen['beneficiary_reference_id']);
     if(2021 - int.parse(eachBen['birth_year']) > 44){
-      beneficiary.isOld = true;
+      beneficiary.isYoung = true;
     }
     String vaccinationStatus = eachBen['vaccination_status'];
     if(vaccinationStatus == 'Partially Vaccinated'){
@@ -76,4 +76,31 @@ class StoreData{
     return benList;
   }
 
+}
+
+
+
+Future<List<String>> getBenListFromPrefs() async {
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  List<String>? benList = pref.getStringList('benList');
+  if(benList == null){
+    benList = [];
+  }
+  return benList;
+}
+
+Future<String> getUserFromPrefs() async {
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  return pref.getString('user').toString();
+
+}
+
+Future<void> setBenListToPrefs(List<String> benList) async {
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  pref.setStringList('benList', benList);
+}
+
+Future<void> setUserToPrefs(String user) async {
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  pref.setString('user', user);
 }

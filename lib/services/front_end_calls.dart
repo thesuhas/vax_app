@@ -28,9 +28,3 @@ class FrontEndCalls{
   }
 
 }
-
-Future<dynamic> runItAll() async {
-  FrontEndCalls frontEndCalls = FrontEndCalls();
-  List<int> sad = await frontEndCalls.getPincodeList(12.936208, 77.573533);
-  print(sad);
-}
