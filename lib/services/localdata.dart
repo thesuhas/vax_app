@@ -52,6 +52,8 @@ class User{
 }
 
 class Beneficiary{
+  late String? beneficiaryName;
+  late String? vaccinationStatus;
   late int? beneficiaryId;
   late bool? isEnabled;
   late bool? isYoung;
@@ -62,13 +64,15 @@ class Beneficiary{
   late bool? bookedSlot;
 
   Beneficiary( {
+    this.beneficiaryName = 'John Doe',
+    this.vaccinationStatus,
     this.beneficiaryId = 0,
     this.isDoseOneDone = false,
     this.isDoseTwoDone = false,
-    this.isYoung = true,
+    this.isYoung = false,
     this.vaccine = 'ANY',
     this.doseOneDate,
-    this.isEnabled = true,
+    this.isEnabled = false,
     this.bookedSlot = false,
   } );
 
@@ -85,6 +89,8 @@ class Beneficiary{
   // To save this to SharedPreferences
   String saveBen(){
     Map<String,dynamic> mapBen = {};
+    mapBen['beneficiaryName'] = beneficiaryName;
+    mapBen['vaccinationStatus'] = vaccinationStatus;
     mapBen['beneficiaryId'] = beneficiaryId;
     mapBen['isDoseOneDone'] = isDoseOneDone;
     mapBen['isYoung'] = isYoung;
@@ -99,6 +105,8 @@ class Beneficiary{
   // To decode data when we get from SharedPreferences into this object
   void getBen(String strBen){
     Map<String,dynamic> mapBen = json.decode(strBen);
+    beneficiaryName = mapBen['beneficiaryName'].toString();
+    vaccinationStatus = mapBen['vaccinationStatus'].toString();
     beneficiaryId = int.parse(mapBen['beneficiaryId'].toString());
     isDoseOneDone = mapBen['isDoseOneDone'].toString() == 'true';
     isYoung = mapBen['isYoung'].toString() == 'true';

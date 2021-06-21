@@ -176,11 +176,11 @@ class SlotCheck{
     List dmyList = vaccine.split('-');
     DateTime doseOneDate = DateTime.utc(dmyList[2], dmyList[1], dmyList[0]);
     if(vaccine == 'COVISHIELD'){
-      return doseOneDate.isAfter(now.add(Duration(days: 84)));
+      return doseOneDate.isAfter(now.add(Duration(days: 83)));
     }
     else{
       // For COVAXIN
-      return doseOneDate.isAfter(now.add(Duration(days: 21)));
+      return doseOneDate.isAfter(now.add(Duration(days: 20)));
     }
   }
 

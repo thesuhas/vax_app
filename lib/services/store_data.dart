@@ -30,20 +30,33 @@ class StoreData{
   Future<void> saveData(dynamic eachBen) async {
     // Set Beneficiary Object
     Beneficiary beneficiary = Beneficiary();
+    beneficiary.beneficiaryName = eachBen['name'];
+    beneficiary.vaccinationStatus = eachBen['vaccination_status'];
     beneficiary.beneficiaryId = int.parse(eachBen['beneficiary_reference_id']);
     if(2021 - int.parse(eachBen['birth_year']) < 44){
       beneficiary.isYoung = true;
     }
     String vaccinationStatus = eachBen['vaccination_status'];
-    if(vaccinationStatus == 'Partially Vaccinated'){
+    if(vaccinationStatus == 'Not Vaccinated'){
+      List<dynamic> appointments = eachBen['appointments'];
+      if(appointments.length == 1){
+        beneficiary.bookedSlot = true;
+      }
+    }
+    else if(vaccinationStatus == 'Partially Vaccinated'){
       beneficiary.isDoseOneDone = true;
       beneficiary.vaccine = eachBen['vaccine'].toString().toUpperCase();
       beneficiary.doseOneDate = eachBen['dose1_date'].toString();
+      List<dynamic> appointments = eachBen['appointments'];
+      if(appointments.length == 2){
+        beneficiary.bookedSlot = true;
+      }
     }
     else if(vaccinationStatus == 'Vaccinated'){
       beneficiary.isDoseOneDone = true;
       beneficiary.isDoseTwoDone = true;
     }
+
 
     // Get Beneficiary List from storage
     SharedPreferences prefs = await SharedPreferences.getInstance();
