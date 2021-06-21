@@ -52,4 +52,13 @@ class FrontEndCalls{
     prefs.setStringList('benList', benListStr);
   }
 
+  List<Beneficiary> benStrToObj(List<String> benListStr){
+    List<Beneficiary> benObjList = [];
+    benListStr.forEach((element) {
+      Beneficiary oneBen = getBen(element);
+      benObjList.add(oneBen);
+    });
+    return benObjList;
+  }
+
 }
