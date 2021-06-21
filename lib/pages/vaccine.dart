@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vax_app/services/localdata.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vax_app/services/front_end_calls.dart';
 
 class Vaccine extends StatefulWidget {
   @override
@@ -18,9 +19,10 @@ class _VaccineState extends State<Vaccine> {
   String? _vaccine;
   bool chosen = true;
   late User user;
-  late List<Beneficiary> beneficiary;
+  List<Beneficiary> beneficiary = [];
 
   Future<void> _loadUser() async {
+    //Future.delayed(Duration(seconds: 1));
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? _user = prefs.getString('user').toString();
     user = getUser(_user);
@@ -31,14 +33,17 @@ class _VaccineState extends State<Vaccine> {
     ben.forEach((element) {
       beneficiary.add(getBen(element));
     });
+    print(beneficiary);
   }
 
-  void save(String? vaccine) {
+  Future<void> save(String? vaccine) async {
     beneficiary.forEach((element) {
       if (element.isDoseOneDone == false) {
         element.vaccine = vaccine;
       }
     });
+    FrontEndCalls frontEndCalls = FrontEndCalls();
+    await frontEndCalls.benListToStringAndStore(beneficiary);
   }
 
 
@@ -48,9 +53,8 @@ class _VaccineState extends State<Vaccine> {
   }
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    await _loadUser();
   }
 
   @override
@@ -147,13 +151,14 @@ class _VaccineState extends State<Vaccine> {
             SizedBox(height: 20,),
             Center(
               child: TextButton(
-                onPressed: () {
+                onPressed: () async {
                    if (_vaccine != ''&& _vaccine != null)
                      {
                        setState(() {
                          chosen = true;
                        });
-
+                       await _loadUser();
+                       await save(_vaccine);
                        print("Chosen Vaccine: $_vaccine");
                        Navigator.pushReplacementNamed(context, '/home');
                      }

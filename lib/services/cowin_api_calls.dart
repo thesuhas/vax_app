@@ -26,7 +26,7 @@ class ApiCalls {
   late String? txnId;
   late String? token;
   late List<dynamic>? benList;
-  late String otp;
+  String? otp;
 
   void _listen() async {
     bool? permissionsGranted = await telephony.requestSmsPermissions;
@@ -186,9 +186,13 @@ class ApiCalls {
   // Shortcut functions
   Future<void> setToken() async {
     _listen();
+    otp = null;
     await getOtp();
+    if (otp == null) {
+      Future.delayed(Duration(seconds: 2));
+    }
     Future.delayed(Duration(seconds: 5), () async {
-      await validateOtp(otp);
+      await validateOtp(otp.toString());
     });
 
   }

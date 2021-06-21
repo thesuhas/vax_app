@@ -21,7 +21,7 @@ class LoadingData extends StatefulWidget {
 class _LoadingDataState extends State<LoadingData> {
 
   String? number = '';
-  String? otp = '';
+  String? otp;
 
   FrontEndCalls frontEndCalls = FrontEndCalls();
 

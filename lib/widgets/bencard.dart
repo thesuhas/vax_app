@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 class BenCard extends StatefulWidget {
 
+  final Function(bool?) onSelect;
+
   // State Variables
   String? name;
   String? benID;
@@ -10,7 +12,7 @@ class BenCard extends StatefulWidget {
   String? vaccine; // To be passed only if at least first dose has been received
 
   // Constructor
-  BenCard({required this.name, required this.benID, required this.vaccineStatus, this.vaccine});
+  BenCard({required this.name, required this.benID, required this.vaccineStatus, this.vaccine, required this.onSelect});
 
   @override
   _BenCardState createState() => _BenCardState();
@@ -94,20 +96,26 @@ class _BenCardState extends State<BenCard> {
             SizedBox(height: 10,),
             Row(
               children: <Widget>[
-                Text(
-                  "Book:",
-                  style: TextStyle(
-                    color: Colors.grey[800],
-                  ),
-                ),
-                Checkbox(
-                  value: isChecked,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      isChecked = value!;
-                    });
-                  },
-                  activeColor: Colors.black,
+                if (widget.vaccineStatus != "Fully Vaccinated")
+                Row(
+                  children: <Widget>[
+                    Text(
+                      "Book:",
+                      style: TextStyle(
+                        color: Colors.grey[800],
+                      ),
+                    ),
+                    Checkbox(
+                      value: isChecked,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          isChecked = value!;
+                        });
+                        widget.onSelect(value!);
+                      },
+                      activeColor: Colors.black,
+                    ),
+                  ],
                 ),
                 Spacer(),
                 IconButton(

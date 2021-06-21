@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:vax_app/services/store_data.dart';
 import 'package:vax_app/widgets/bencard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vax_app/services/localdata.dart';
+import 'package:vax_app/services/front_end_calls.dart';
 
 class Home extends StatefulWidget {
 
   bool? _booking;
   String? _button = "Book";
+
+  late List<String> beneficiaries;
 
   @override
   _HomeState createState() => _HomeState();
@@ -13,13 +18,29 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
+  FrontEndCalls frontEndCalls = FrontEndCalls();
+
   Map data = {};
 
-  bool isChecked = false;
+  late List<Beneficiary> bens = [];
+
+  void loadBen() async {
+    widget.beneficiaries = await getBenListFromPrefs();
+    bens = frontEndCalls.benStrToObj(widget.beneficiaries);
+    print(bens);
+  }
+
 
   void _redirect() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('redirect', true);
+  }
+
+  void isChecked(bool? value, int index) {
+    setState(() {
+      bens[index].isEnabled = value!;
+    });
+    print("bencard ${bens[index]}");
   }
 
   void _checkBooking() async {
@@ -58,6 +79,14 @@ class _HomeState extends State<Home> {
     return true;
   }
 
+  void setup() async {
+    loadBen();
+    Future.delayed(Duration(seconds: 5), () {
+      _checkBooking();
+      _resetUpdate();
+    });
+  }
+
   void _update() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('updateBen', true);
@@ -71,12 +100,16 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _checkBooking();
-    _resetUpdate();
+    setup();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (bens.length == 0) {
+      setState(() {
+
+      });
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -221,10 +254,10 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            BenCard(name: "Suhas Thalanki", benID: "123456789", vaccineStatus: "Partially Vaccinated", vaccine: "COVAXIN",),
-            BenCard(name: "Roopak Maddara", benID: "6969696969", vaccineStatus: "Not Vaccinated",),
-            BenCard(name: "Sachin Shankar", benID: "4204204202", vaccineStatus: "Fully Vaccinated", vaccine: "BALLER",),
-            BenCard(name: "Hariharisudan Whatever", benID: "987654321", vaccineStatus: "Partially Vaccinated", vaccine: "SPUTNIK",),
+            BenCard(name: bens[0].beneficiaryName, benID: bens[0].beneficiaryId.toString(), vaccineStatus: bens[0].vaccinationStatus, vaccine: bens[0].vaccine, onSelect: (bool? test) {isChecked(test, 0);},),
+            BenCard(name: bens[1].beneficiaryName, benID: bens[1].beneficiaryId.toString(), vaccineStatus: bens[1].vaccinationStatus,vaccine: bens[1].vaccine,onSelect: (bool? test) {isChecked(test, 1);}),
+            BenCard(name: bens[2].beneficiaryName, benID: bens[2].beneficiaryId.toString(), vaccineStatus: bens[2].vaccinationStatus, vaccine: bens[2].vaccine,onSelect: (bool? test) {isChecked(test, 2);}),
+            BenCard(name: bens[3].beneficiaryName, benID: bens[3].beneficiaryId.toString(), vaccineStatus: bens[3].vaccinationStatus, vaccine: bens[3].vaccine,onSelect: (bool? test) {isChecked(test, 3);}),
             SizedBox(height: 20,),
             Container(
               margin: EdgeInsets.fromLTRB(0, 0, 0, 20),

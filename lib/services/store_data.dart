@@ -17,10 +17,12 @@ class StoreData{
     ApiCalls apiCalls = ApiCalls();
     await apiCalls.setToken();
     await apiCalls.getBen();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     List<dynamic>? benList = apiCalls.benList;
     if(benList == null){
       benList = [];
     }
+    prefs.remove('benList');
     benList.forEach((element) {
       saveData(element);
     });
@@ -66,8 +68,7 @@ class StoreData{
     }
 
     // Function to check if a particular beneficiary is already in the list. If so, remove it
-    benList = removeIfExists(benList, beneficiary);
-
+    //benList = removeIfExists(benList, beneficiary);
     // Saving the beneficiary back to the storage
     String benStr = beneficiary.saveBen();
     benList.add(benStr);
