@@ -42,4 +42,14 @@ class FrontEndCalls{
     prefs.setString('user', strUser);
   }
 
+  Future<void> benListToStringAndStore(List<Beneficiary> benList) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> benListStr = [];
+    benList.forEach((element) {
+      String ben = element.saveBen();
+      benListStr.add(ben);
+    });
+    prefs.setStringList('benList', benListStr);
+  }
+
 }
