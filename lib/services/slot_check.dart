@@ -189,3 +189,29 @@ class SlotCheck{
 
 
 }
+
+class StarterObject {
+
+  bool starter = true;
+
+  void stopSearching() {
+    starter = false;
+  }
+
+  dynamic startSearching() async {
+    SlotCheck slotCheck = SlotCheck();
+    await slotCheck.initialise();
+    String returnValue;
+    while (starter == true) {
+      Future.delayed(Duration(seconds: 20));
+      returnValue = await slotCheck.slotCheck();
+      if (returnValue == 'done') {
+        stopSearching();
+        return 'done';
+      }
+      else {
+        continue;
+      }
+    }
+  }
+}
