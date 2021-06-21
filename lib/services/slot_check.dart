@@ -4,15 +4,11 @@ import 'package:vax_app/services/store_data.dart';
 
 class SlotCheck{
 
-  List<String> benList;
-  User user;
+  late List<String> benList;
+  late User user;
   late ApiCalls apiCalls;
   late List<int> pincodeList;
 
-  SlotCheck( {
-    required this.benList,
-    required this.user,
-} );
 
   // Supporting function. NOT TO BE CALLED SEPARATELY!
   // Sets this object with the beneficiary list from local storage
@@ -45,6 +41,8 @@ class SlotCheck{
     if(user.wantFree == true){
       centers = filterFree(centers);
     }
+    String? status;
+    bool booked = false;
     await Future.forEach(benList, (beneficiary) async{
       Beneficiary ben = getBen(beneficiary.toString());
       List<dynamic> validCenters = distribute(ben, centers);
@@ -61,18 +59,23 @@ class SlotCheck{
       List<int> beneficiaries = [benId];
       Map<int, String> scheduleResponse = await apiCalls.schedule(dose, sessionId, slot, centerId, beneficiaries);
       scheduleResponse.forEach((key, value) {
-        if(key == 200){
+        if(key == 200 && booked == false){
           // Refresh beneficiaries
+          status = "done";
+          booked = true;
           // Send notification
         }
-        else if(key == 409){
+        else if(key == 409 && booked == false){
           // Fully booked
+          status = "fully booked";
         }
-        else{
+        else if (booked == false){
           // Something's wrong. Bad request or unauthenticated access or server error
+          status = "error";
         }
       });
     });
+    return status;
   }
 
   // Supporting function. NOT TO BE CALLED SEPARATELY!
