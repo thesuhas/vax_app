@@ -10,6 +10,7 @@ class Home extends StatefulWidget {
 
   bool? _booking;
   String? _button = "Book";
+  bool? inProcess;
 
   late List<String> beneficiaries;
 
@@ -24,6 +25,7 @@ class _HomeState extends State<Home> {
   Map data = {};
 
   late List<Beneficiary> bens = [];
+  StarterObject starter = StarterObject();
 
   List<Widget> widgets = [];
 
@@ -67,10 +69,14 @@ class _HomeState extends State<Home> {
     await frontEndCalls.benListToStringAndStore(bens);
     setState(() {
       widget._booking = true;
+      widget.inProcess = true;
     });
-    await slotCheck.initialise();
-    String? status = await slotCheck.slotCheck();
-    print(status);
+    await starter.startSearching();
+    setState(() {
+      widget._booking = false;
+    });
+    slotCheck.slotCheck();
+    //print(status);
   }
 
   void _endBooking() async {
@@ -139,7 +145,7 @@ class _HomeState extends State<Home> {
     return FutureBuilder(
       future: setup(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
+        if (snapshot.connectionState != ConnectionState.done && widget.inProcess == false) {
           return Center(
             child: CircularProgressIndicator(),
           );

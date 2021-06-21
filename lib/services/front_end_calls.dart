@@ -1,6 +1,7 @@
 import 'package:vax_app/services/cowin_api_calls.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vax_app/services/localdata.dart';
+import 'package:vax_app/services/store_data.dart';
 
 class FrontEndCalls{
 
@@ -31,7 +32,7 @@ class FrontEndCalls{
     user.setPinList(pinSave);
     String strUserNew = user.saveUser();
     prefs.setString('user', strUserNew);
-    print("Saved $pinSave");
+    //print("Saved $pinSave");
   }
 
   // Sets the phone number of the user to the user object in local storage

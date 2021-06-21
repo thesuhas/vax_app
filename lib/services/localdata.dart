@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'dart:math';
+
 class User{
   late int? phNo;
   late List<int>? pinList;
@@ -9,8 +11,8 @@ class User{
   User( {
     this.phNo = 0,
     this.isSetup = false,
-    this.pinList,
     this.wantFree = false,
+    this.pinList,
   } );
 
   // Set boolean to true after he is done setting up
@@ -40,7 +42,12 @@ class User{
     phNo = int.parse(mapUser['phNo'].toString());
     try {
       isSetup = mapUser['isSetup'].toString() == 'true';
-      pinList = mapUser['pinList'];
+      List<int> pins = [];
+      //pinList = [];
+      for (int i = 0; i < mapUser['pinList'].length; i ++) {
+        pins.add(mapUser['pinList'][i]);
+      }
+      pinList = pins;
       wantFree = mapUser['wantFree'];
     }
     catch(e){

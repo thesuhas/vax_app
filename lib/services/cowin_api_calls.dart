@@ -60,6 +60,7 @@ class ApiCalls {
             Uri.parse(url),
             headers: headers
         );
+        print(response.statusCode);
         if(response.statusCode == 200){
           var resp = jsonDecode(response.body);
           sessions.add(resp['sessions']);
@@ -177,6 +178,7 @@ class ApiCalls {
       headers: headers,
       body: jsonEncode(data),
     );
+    print(response.body);
     Map<int, String> ret = {};
     ret[response.statusCode] = response.body;
     return ret;
@@ -189,9 +191,10 @@ class ApiCalls {
     otp = null;
     await getOtp();
     if (otp == null) {
-      Future.delayed(Duration(seconds: 2));
+      await Future.delayed(Duration(seconds: 2));
     }
-    Future.delayed(Duration(seconds: 5), () async {
+    await Future.delayed(Duration(seconds: 5), () async {
+      print("delay done");
       await validateOtp(otp.toString());
     });
 

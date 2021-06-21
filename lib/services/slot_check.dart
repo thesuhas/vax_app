@@ -1,6 +1,7 @@
 import 'localdata.dart';
 import 'package:vax_app/services/cowin_api_calls.dart';
 import 'package:vax_app/services/store_data.dart';
+import 'package:vax_app/services/localdata.dart';
 
 class SlotCheck{
 
@@ -21,6 +22,7 @@ class SlotCheck{
   Future<void> setUserObj() async {
     String userStr = await getUserFromPrefs();
     user = getUser(userStr);
+    //print(user.pinList);
   }
 
   // This function must be called once after which the slotCheck function can be called
@@ -29,6 +31,7 @@ class SlotCheck{
     await setBeneficiaryList();
     apiCalls = ApiCalls();
     List<int>? pList = user.pinList;
+    //print("plist: $pList");
     if(pList == null){
       pList = [];
     }
@@ -45,35 +48,45 @@ class SlotCheck{
     bool booked = false;
     await Future.forEach(benList, (beneficiary) async{
       Beneficiary ben = getBen(beneficiary.toString());
-      List<dynamic> validCenters = distribute(ben, centers);
-      dynamic bookCenter = validCenters[0];
-      int dose = getDose(ben);
-      String sessionId = bookCenter['session_id'];
-      List slots = bookCenter['slots'];
-      String slot = slots[0];
-      int centerId = bookCenter['center_id'];
-      int? benId = ben.beneficiaryId;
-      if(benId == null){
-        benId = 0;
+      //print(ben.beneficiaryName);
+      List<dynamic> validCenters = [];
+      //print("valid centers before distr: $validCenters");
+      validCenters = distribute(ben, centers);
+      //print(validCenters);
+      if (validCenters.length != 0) {
+        dynamic bookCenter = validCenters[0];
+        int dose = getDose(ben);
+        String sessionId = bookCenter['session_id'].toString();
+        List slots = bookCenter['slots'];
+        String slot = slots[0].toString();
+        int centerId = int.parse(bookCenter['center_id'].toString());
+        int? benId = ben.beneficiaryId;
+        if (benId == null) {
+          benId = 0;
+        }
+        List<int> beneficiaries = [benId];
+        Map<int, String> scheduleResponse = await apiCalls.schedule(
+            dose, sessionId, slot, centerId, beneficiaries);
+        scheduleResponse.forEach((key, value) {
+          if (key == 200 && booked == false) {
+            // Refresh beneficiaries
+            status = "done";
+            booked = true;
+            // Send notification
+          }
+          else if (key == 409 && booked == false) {
+            // Fully booked
+            status = "fully booked";
+          }
+          else if (booked == false) {
+            // Something's wrong. Bad request or unauthenticated access or server error
+            status = "error";
+          }
+        });
       }
-      List<int> beneficiaries = [benId];
-      Map<int, String> scheduleResponse = await apiCalls.schedule(dose, sessionId, slot, centerId, beneficiaries);
-      scheduleResponse.forEach((key, value) {
-        if(key == 200 && booked == false){
-          // Refresh beneficiaries
-          status = "done";
-          booked = true;
-          // Send notification
-        }
-        else if(key == 409 && booked == false){
-          // Fully booked
-          status = "fully booked";
-        }
-        else if (booked == false){
-          // Something's wrong. Bad request or unauthenticated access or server error
-          status = "error";
-        }
-      });
+      else {
+        status = "no centers";
+      }
     });
     return status;
   }
@@ -83,11 +96,10 @@ class SlotCheck{
   // according to it's requirements
   List<dynamic> distribute(Beneficiary benObj, List<dynamic> centers) {
     if(benObj.isEnabled == true && benObj.bookedSlot == false){
+      print("statement 1");
       if(benObj.isYoung == true){
+        print("young");
         centers = filterYoung(centers);
-      }
-      else{
-        return [];
       }
       // Filter vaccine
       centers = filterVaccine(centers, benObj.vaccine.toString());
@@ -98,17 +110,11 @@ class SlotCheck{
         if(validDueDate(benObj.doseOneDate.toString(), benObj.vaccine.toString())){
           return centers;
         }
-        else{
-          return [];
-        }
+
       }
-      else{
-        return [];
-      }
+
     }
-    else{
-      return [];
-    }
+    return centers;
   }
 
   // Supporting function. NOT TO BE CALLED SEPARATELY!
@@ -176,8 +182,9 @@ class SlotCheck{
   // Checks if a dose one vaccinated beneficiary is eligible for dose two
   bool validDueDate(String dueDate, String vaccine){
     DateTime now = DateTime.now();
-    List dmyList = vaccine.split('-');
-    DateTime doseOneDate = DateTime.utc(dmyList[2], dmyList[1], dmyList[0]);
+    List dmyList = dueDate.split('-');
+    //print(dmyList);
+    DateTime doseOneDate = DateTime.utc(int.parse(dmyList[2]), int.parse(dmyList[1]), int.parse(dmyList[0]));
     if(vaccine == 'COVISHIELD'){
       return doseOneDate.isAfter(now.add(Duration(days: 83)));
     }
@@ -203,6 +210,7 @@ class StarterObject {
     await slotCheck.initialise();
     String returnValue;
     while (starter == true) {
+      print("searching");
       Future.delayed(Duration(seconds: 20));
       returnValue = await slotCheck.slotCheck();
       if (returnValue == 'done') {
