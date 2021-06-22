@@ -80,7 +80,7 @@ class _LoadingDataState extends State<LoadingData> {
   }
 
 
-  void _location() async {
+  Future<void> _location() async {
     Location location = new Location();
     LocationData _location;
     // Get service if necessary
@@ -110,6 +110,11 @@ class _LoadingDataState extends State<LoadingData> {
     }
   }
 
+  void loadSetUp() async {
+    await _location();
+    _beneficiaries();
+  }
+
   @override
   void initState () {
     super.initState();
@@ -117,8 +122,7 @@ class _LoadingDataState extends State<LoadingData> {
     _isUpdate();
     // getNumber();
     // _validate();
-    _location();
-    _beneficiaries();
+
   }
 
   @override
