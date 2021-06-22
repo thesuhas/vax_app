@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 import 'localdata.dart';
 import 'package:vax_app/services/cowin_api_calls.dart';
 import 'package:vax_app/services/store_data.dart';
@@ -78,6 +80,7 @@ class SlotCheck{
         if (validCenters.length != 0) {
           for (int j = 0; j < validCenters.length; j ++) {
             dynamic bookCenter = validCenters[j];
+            print(bookCenter);
             String vaccine = bookCenter['vaccine'];
             int dose = getDose(ben);
             String sessionId = bookCenter['session_id'].toString();

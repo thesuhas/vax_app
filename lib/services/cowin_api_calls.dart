@@ -152,7 +152,7 @@ class ApiCalls {
   }
 
   Future<void> getBen() async {
-    // await Future.delayed(Duration(seconds: 7));
+    await Future.delayed(Duration(seconds: 7));
     print(headers);
     String url = "https://cdn-api.co-vin.in/api/v2/appointment/beneficiaries";
     Response response = await get(
@@ -169,7 +169,7 @@ class ApiCalls {
   }
 
   Future<Map<int, String>> schedule(int dose, String sessionId, String slot, int centerId, List<int> beneficiaries) async {
-    await setToken();
+    await bookToken();
     String url = 'https://cdn-api.co-vin.in/api/v2/appointment/schedule';
     Object? data = {
       'dose': dose,
@@ -203,7 +203,19 @@ class ApiCalls {
     //   print("delay done");
     await validateOtp(otp.toString());
     // });
-
+  }
+  Future<void> bookToken() async {
+    listen();
+    otp = null;
+    await getOtp();
+    if (otp == null) {
+      //await gotOtp();
+       await Future.delayed(Duration(seconds: 2));
+    }
+    await Future.delayed(Duration(seconds: 5), () async {
+       print("delay done");
+        await validateOtp(otp.toString());
+     });
   }
 
   Future<void> gotOtp() async{

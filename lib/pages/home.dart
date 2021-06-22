@@ -75,15 +75,22 @@ class _HomeState extends State<Home> {
     return false;
   }
 
-  void _startBooking() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('booking', true);
-    await frontEndCalls.benListToStringAndStore(bens);
+  void updateState() {
     setState(() {
       widget._booking = true;
       widget.inProcess = true;
     });
+  }
+
+  void _startBooking() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('booking', true);
+    await frontEndCalls.benListToStringAndStore(bens);
+    if (widget._booking == false && widget.inProcess != true) {
+      updateState();
+    }
     String? status = await starter.startSearching();
+    print("finished booking");
     await _endBooking();
     _update();
     Navigator.pushReplacementNamed(context, '/loading');
@@ -137,7 +144,7 @@ class _HomeState extends State<Home> {
     }
     else {
       for (int i = 0; i < bens.length; i ++) {
-        print("entered");
+        print("entered widget gen");
         widgets.add(BenCard(ben: bens[i], onSelect: (bool? test) {isChecked(test, i);}, user: user));
       }
     }
