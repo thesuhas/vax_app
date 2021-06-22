@@ -407,6 +407,34 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                   ),
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          "IMPORTANT: ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.amberAccent[200],
+                            fontSize: 20,
+                            letterSpacing: 2,
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 20),
+                          child: Text(
+                            "Click Update Beneficiaries after receiving Vaccination",
+                            style: TextStyle(
+                              color: Colors.amberAccent[200],
+                              fontSize: 20,
+                              letterSpacing: 2,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

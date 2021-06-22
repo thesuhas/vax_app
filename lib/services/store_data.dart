@@ -57,6 +57,7 @@ class StoreData{
     else if(vaccinationStatus == 'Vaccinated'){
       beneficiary.isDoseOneDone = true;
       beneficiary.isDoseTwoDone = true;
+      beneficiary.bookedSlot = false;
     }
 
 

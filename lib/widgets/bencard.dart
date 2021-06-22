@@ -86,7 +86,7 @@ class _BenCardState extends State<BenCard> {
   }
 
   List<Widget> checkOrSlip() {
-     if (widget.ben.bookedSlot == true) {
+     if (widget.ben.bookedSlot == true && widget.ben.isDoseTwoDone == false) {
        return <Widget>[
          TextButton(
            onPressed: (){},
