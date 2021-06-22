@@ -122,7 +122,7 @@ class _LoadingDataState extends State<LoadingData> {
     _isUpdate();
     // getNumber();
     // _validate();
-
+    loadSetUp();
   }
 
   @override
