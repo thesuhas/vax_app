@@ -159,7 +159,7 @@ class ApiCalls {
         headers: headers
     );
     print(response.statusCode);
-    print(response.body);
+    //print(response.body);
     if (response.statusCode == 200) {
       // ben = response.body;
       Map<String, dynamic> benJson = jsonDecode(response.body);
@@ -182,7 +182,7 @@ class ApiCalls {
       headers: headers,
       body: jsonEncode(data),
     );
-    print(response.body);
+    //print(response.body);
     Map<int, String> ret = {};
     ret[response.statusCode] = response.body;
     return ret;

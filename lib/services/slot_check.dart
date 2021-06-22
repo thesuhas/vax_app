@@ -99,8 +99,8 @@ class SlotCheck{
                 bookedBens ++;
                 ben.isEnabled = false;
                 ben.bookedSlot = true;
-                ben.appointmentId = jsonDecode(scheduleResponse[key].toString())["appointment_id"].toString();
-                print(ben.appointmentId);
+                ben.appointmentId = jsonDecode(scheduleResponse[key].toString())["appointment_confirmation_no"].toString();
+                //print(ben.appointmentId);
                 await setBenListToPrefs(benList);
                 break;
                 // Send notification
