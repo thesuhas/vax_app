@@ -293,6 +293,51 @@ class _HomeState extends State<Home> {
                         color: Colors.amberAccent[200],
                       ),
                     ),
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      child: ListTile(
+                        title: Text(
+                          "Change Fee Type",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                          ),
+                        ),
+                        onTap: () {
+                          if (!_checkBool(widget._booking)) {
+                            _redirect();
+                            Navigator.pushReplacementNamed(context, '/vaccine');
+                          }
+                          else {
+                            showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text('Booking in Progress'),
+                                  content: const Text('Cannot change Vaccine Preference during Booking'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text(
+                                        "OK",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                  backgroundColor: Colors.amberAccent[200],
+                                )
+                            );
+                          }
+                        },
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.amberAccent[200],
+                      ),
+                    ),
                   ],
                 ),
               ),
