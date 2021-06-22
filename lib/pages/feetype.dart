@@ -37,6 +37,13 @@ class _FeeTypeState extends State<FeeType> {
     print(beneficiary);
   }
 
+  Future<void> saveSetUp() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('isSetUp');
+    prefs.setBool('isSetUp', true);
+    print("saved");
+  }
+
   Future<void> save(String? feeType) async {
     if (feeType != null) {
       if (feeType == 'Paid') {
@@ -169,6 +176,7 @@ class _FeeTypeState extends State<FeeType> {
                       });
                       await _loadUser();
                       await save(_feeType);
+                      await saveSetUp();
                       print("Chosen Fee Type: $_feeType");
                       Navigator.pushReplacementNamed(context, '/home');
                     }
