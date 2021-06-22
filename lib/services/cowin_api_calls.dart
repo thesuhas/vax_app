@@ -28,11 +28,10 @@ class ApiCalls {
   late List<dynamic>? benList;
   String? otp;
 
-  void _listen() async {
+  void listen() async {
     bool? permissionsGranted = await telephony.requestSmsPermissions;
     telephony.listenIncomingSms(
       onNewMessage: (message) {
-        print(message.body);
         if (message.body != null) {
           String? text = message.body;
           if (text == null) {
@@ -48,7 +47,6 @@ class ApiCalls {
       listenInBackground: true,
     );
   }
-
 
   // Class methods
 
@@ -193,7 +191,7 @@ class ApiCalls {
 
   // Shortcut functions
   Future<void> setToken() async {
-    _listen();
+    listen();
     otp = null;
     await getOtp();
     if (otp == null) {

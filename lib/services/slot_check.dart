@@ -245,6 +245,7 @@ class StarterObject {
 
   dynamic startSearching() async {
     SlotCheck slotCheck = SlotCheck();
+    slotCheck.apiCalls.listen();
     await slotCheck.initialise();
     List<String> returnValue;
     while (starter == true) {
