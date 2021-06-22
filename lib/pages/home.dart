@@ -63,6 +63,13 @@ class _HomeState extends State<Home> {
     }
   }
 
+  // void secondState() {
+  //   print("second set state");
+  //   setState(() {
+  //     widget._booking = false;
+  //   });
+  // }
+
   void _startBooking() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('booking', true);
@@ -72,19 +79,21 @@ class _HomeState extends State<Home> {
       widget.inProcess = true;
     });
     await starter.startSearching();
-    setState(() {
-      widget._booking = false;
-    });
-    slotCheck.slotCheck();
+    _endBooking();
+    //slotCheck.slotCheck();
     //print(status);
   }
 
   void _endBooking() async {
+    print("entered end");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('booking', false);
-    setState(() {
-      widget._booking = false;
-    });
+    // setState(() {
+    //   widget._booking = false;
+    // });
+    if (widget.inProcess == true) {
+      Navigator.pushReplacementNamed(context, '/home');
+    }
   }
 
   bool _checkBool(bool? test) {

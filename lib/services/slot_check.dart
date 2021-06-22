@@ -44,50 +44,73 @@ class SlotCheck{
     if(user.wantFree == true){
       centers = filterFree(centers);
     }
-    String? status;
+    List<String> status = [];
+    int activeBens = 0;
+    for (int i = 0; i < benList.length; i ++) {
+      status.add('booked');
+      if (getBen(benList[i]).isEnabled == true) {
+       activeBens ++;
+      }
+    }
     bool booked = false;
-    await Future.forEach(benList, (beneficiary) async{
-      Beneficiary ben = getBen(beneficiary.toString());
-      //print(ben.beneficiaryName);
-      List<dynamic> validCenters = [];
-      //print("valid centers before distr: $validCenters");
-      validCenters = distribute(ben, centers);
-      //print(validCenters);
-      if (validCenters.length != 0) {
-        dynamic bookCenter = validCenters[0];
-        int dose = getDose(ben);
-        String sessionId = bookCenter['session_id'].toString();
-        List slots = bookCenter['slots'];
-        String slot = slots[0].toString();
-        int centerId = int.parse(bookCenter['center_id'].toString());
-        int? benId = ben.beneficiaryId;
-        if (benId == null) {
-          benId = 0;
+    int bookedBens = 0;
+    //await Future.forEach(benList, (beneficiary) async{
+    for (int i = 0; i < benList.length; i ++) {
+      if (activeBens == bookedBens) {
+        break;
+      }
+      Beneficiary ben = getBen(benList[i].toString());
+      if (ben.isEnabled == true) {
+          //print(ben.beneficiaryName);
+          List<dynamic> validCenters = [];
+        //print("valid centers before distr: $validCenters");
+        validCenters = distribute(ben, centers);
+        //print(validCenters);
+        if (validCenters.length != 0) {
+          for (int j = 0; j < validCenters.length; j ++) {
+            dynamic bookCenter = validCenters[j];
+            int dose = getDose(ben);
+            String sessionId = bookCenter['session_id'].toString();
+            List slots = bookCenter['slots'];
+            String slot = slots[0].toString();
+            int centerId = int.parse(bookCenter['center_id'].toString());
+            int? benId = ben.beneficiaryId;
+            if (benId == null) {
+              benId = 0;
+            }
+            List<int> beneficiaries = [benId];
+            print(bookCenter);
+            Map<int, String> scheduleResponse = await apiCalls.schedule(
+                dose, sessionId, slot, centerId, beneficiaries);
+            for (var key in scheduleResponse.keys) {
+              if (key == 200 && booked == false) {
+                // Refresh beneficiaries
+                status[i] = "done";
+                booked = true;
+                bookedBens ++;
+                break;
+                // Send notification
+              }
+              else if (key == 409 && booked == false) {
+                // Fully booked
+                status[i] = "fully booked";
+              }
+              else if (booked == false) {
+                // Something's wrong. Bad request or unauthenticated access or server error
+                status[i] = "error";
+              }
+            }
+            if (booked == true) {
+              booked = false;
+              break;
+            }
+          }
         }
-        List<int> beneficiaries = [benId];
-        Map<int, String> scheduleResponse = await apiCalls.schedule(
-            dose, sessionId, slot, centerId, beneficiaries);
-        scheduleResponse.forEach((key, value) {
-          if (key == 200 && booked == false) {
-            // Refresh beneficiaries
-            status = "done";
-            booked = true;
-            // Send notification
-          }
-          else if (key == 409 && booked == false) {
-            // Fully booked
-            status = "fully booked";
-          }
-          else if (booked == false) {
-            // Something's wrong. Bad request or unauthenticated access or server error
-            status = "error";
-          }
-        });
+        else {
+          status[i] = "no centers";
+        }
       }
-      else {
-        status = "no centers";
-      }
-    });
+    }
     return status;
   }
 
@@ -95,6 +118,7 @@ class SlotCheck{
   // This function checks each beneficiary's unique data and filters out the incoming list of centers
   // according to it's requirements
   List<dynamic> distribute(Beneficiary benObj, List<dynamic> centers) {
+    print(benObj.isDoseOneDone);
     if(benObj.isEnabled == true && benObj.bookedSlot == false){
       print("statement 1");
       if(benObj.isYoung == true){
@@ -103,12 +127,14 @@ class SlotCheck{
       }
       // Filter vaccine
       centers = filterVaccine(centers, benObj.vaccine.toString());
+      //print(centers);
       if(benObj.isDoseOneDone == false){
         return centers;
       }
       else if(benObj.isDoseOneDone == true && benObj.isDoseTwoDone == false){
+        print("test");
         if(validDueDate(benObj.doseOneDate.toString(), benObj.vaccine.toString())){
-          return centers;
+          return validDoseTwo(centers);
         }
 
       }
@@ -178,6 +204,17 @@ class SlotCheck{
 
   }
 
+  List<dynamic> validDoseTwo(List<dynamic> centers) {
+    List<dynamic> newCenters = [];
+    centers.forEach((center) {
+      if (center['available_capacity_dose2'] > 9) {
+        print("filtered");
+        newCenters.add(center);
+      }
+    });
+    return newCenters;
+  }
+
   // Supporting function. NOT TO BE CALLED SEPARATELY!
   // Checks if a dose one vaccinated beneficiary is eligible for dose two
   bool validDueDate(String dueDate, String vaccine){
@@ -208,13 +245,14 @@ class StarterObject {
   dynamic startSearching() async {
     SlotCheck slotCheck = SlotCheck();
     await slotCheck.initialise();
-    String returnValue;
+    List<String> returnValue;
     while (starter == true) {
       print("searching");
       Future.delayed(Duration(seconds: 20));
       returnValue = await slotCheck.slotCheck();
-      if (returnValue == 'done') {
+      if (returnValue.contains('done')) {
         stopSearching();
+        print("Booking done");
         return 'done';
       }
       else {
