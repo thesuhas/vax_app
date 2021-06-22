@@ -152,7 +152,7 @@ class ApiCalls {
   }
 
   Future<void> getBen() async {
-    await Future.delayed(Duration(seconds: 7));
+    // await Future.delayed(Duration(seconds: 7));
     print(headers);
     String url = "https://cdn-api.co-vin.in/api/v2/appointment/beneficiaries";
     Response response = await get(
