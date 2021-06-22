@@ -64,11 +64,10 @@ class _LoadingDataState extends State<LoadingData> {
   // }
 
   void _beneficiaries() async {
-    storeData.getAndSaveData();
+    await storeData.getAndSaveData();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? isBen = prefs.getBool('isBen');
     Future.delayed(Duration(seconds: 7), () {
-      print("entered");
       //print(isBen);
       // aut.beneficiaries();
       if (isUpdate == true) {

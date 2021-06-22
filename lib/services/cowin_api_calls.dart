@@ -32,11 +32,17 @@ class ApiCalls {
     bool? permissionsGranted = await telephony.requestSmsPermissions;
     telephony.listenIncomingSms(
       onNewMessage: (message) {
-        String? text = message.body?.substring(37, 43);
-        if (text == null) {
-          text = '';
+        print(message.body);
+        if (message.body != null) {
+          String? text = message.body;
+          if (text == null) {
+            text = '';
+          }
+          if (text.contains("Your OTP to register/access CoWIN is")) {
+            otp = text.substring(37, 43);
+          }
         }
-        otp = text;
+
       },
       onBackgroundMessage: backgroundMessageHandler,
       listenInBackground: true,
