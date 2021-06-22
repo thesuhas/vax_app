@@ -13,8 +13,10 @@ class BenCard extends StatefulWidget {
   // String? vaccine; // To be passed only if at least first dose has been received
   late Beneficiary ben;
 
+  late User user;
+
   // Constructor
-  BenCard({required this.ben, required this.onSelect});
+  BenCard({required this.ben, required this.onSelect, required this.user});
 
   @override
   _BenCardState createState() => _BenCardState();
@@ -71,6 +73,18 @@ class _BenCardState extends State<BenCard> {
     }
   }
 
+  String getFeeType() {
+    if (widget.user.wantFree == true && widget.user.wantPaid == false) {
+      return "Free";
+    }
+    else if (widget.user.wantPaid == true && widget.user.wantFree == false) {
+      return "Paid";
+    }
+    else {
+      return "Any";
+    }
+  }
+
   List<Widget> checkOrSlip() {
      if (widget.ben.bookedSlot == true) {
        return <Widget>[
@@ -92,26 +106,32 @@ class _BenCardState extends State<BenCard> {
     else  {
        if (widget.ben.vaccinationStatus != "Fully Vaccinated" && dueDateCheck() == true) {
          return <Widget>[
-           Row(
-             children: <Widget>[
-               Text(
-                 "Book:",
-                 style: TextStyle(
-                   color: Colors.grey[800],
+           Container(
+             padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+             child: Row(
+               children: <Widget>[
+                 Text(
+                   "Book:",
+                   style: TextStyle(
+                     color: Colors.grey[800],
+                   ),
                  ),
-               ),
-               Checkbox(
-                 value: isChecked,
-                 onChanged: (bool? value) {
-                   setState(() {
-                     isChecked = value!;
-                   });
-                   widget.onSelect(value!);
-                 },
-                 activeColor: Colors.black,
-               ),
+                 SizedBox(
+                   height: 24,
+                   child: Checkbox(
+                     value: isChecked,
+                     onChanged: (bool? value) {
+                       setState(() {
+                         isChecked = value!;
+                       });
+                       widget.onSelect(value!);
+                     },
+                     activeColor: Colors.black,
+                   ),
+                 ),
 
-             ],
+               ],
+             ),
            ),
          ];
        }
@@ -186,6 +206,13 @@ class _BenCardState extends State<BenCard> {
             SizedBox(height: 10,),
             Text(
               "Beneficiary ID: ${widget.ben.beneficiaryId}",
+              style: TextStyle(
+                color: Colors.grey[800],
+              ),
+            ),
+            SizedBox(height: 10,),
+            Text(
+              "Fee Type: ${getFeeType()}",
               style: TextStyle(
                 color: Colors.grey[800],
               ),

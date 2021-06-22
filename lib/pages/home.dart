@@ -22,6 +22,8 @@ class _HomeState extends State<Home> {
 
   FrontEndCalls frontEndCalls = FrontEndCalls();
 
+  late User user;
+
   Map data = {};
 
   late List<Beneficiary> bens = [];
@@ -82,12 +84,14 @@ class _HomeState extends State<Home> {
       widget.inProcess = true;
     });
     String? status = await starter.startSearching();
-    _endBooking();
+    await _endBooking();
+    _update();
+    Navigator.pushReplacementNamed(context, '/loading');
     //slotCheck.slotCheck();
     print(status);
   }
 
-  void _endBooking() async {
+  Future<void> _endBooking() async {
     print("entered end");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('booking', false);
@@ -108,6 +112,8 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> setup() async {
+    String userStr = await getUserFromPrefs();
+    user = getUser(userStr);
     await loadBen();
     _checkBooking();
     _resetUpdate();
@@ -131,7 +137,7 @@ class _HomeState extends State<Home> {
     }
     else {
       for (int i = 0; i < bens.length; i ++) {
-        widgets.add(BenCard(ben: bens[i], onSelect: (bool? test) {isChecked(test, i);},));
+        widgets.add(BenCard(ben: bens[i], onSelect: (bool? test) {isChecked(test, i);}, user: user));
       }
     }
 
@@ -254,6 +260,7 @@ class _HomeState extends State<Home> {
                         ),
                         onTap: () {
                           if (!_checkBool(widget._booking)) {
+                            _redirect();
                             Navigator.pushReplacementNamed(context, '/vaccine');
                           }
                           else {

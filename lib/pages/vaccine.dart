@@ -10,6 +10,27 @@ class Vaccine extends StatefulWidget {
 
 class _VaccineState extends State<Vaccine> {
 
+  bool? redirect;
+
+  void _checkRedirect() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    redirect = prefs.getBool('redirect');
+    if (redirect == null)
+    {
+      redirect = false;
+    }
+  }
+
+  void _setRedirect() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    redirect = prefs.getBool('redirect');
+    if (redirect == true)
+    {
+      redirect = false;
+      prefs.setBool('redirect', false);
+    }
+  }
+
   List<String> vaccines = [
     'ANY',
     'COVAXIN',
@@ -55,6 +76,7 @@ class _VaccineState extends State<Vaccine> {
   @override
   void initState() {
     super.initState();
+    _checkRedirect();
   }
 
   @override
@@ -160,7 +182,13 @@ class _VaccineState extends State<Vaccine> {
                        await _loadUser();
                        await save(_vaccine);
                        print("Chosen Vaccine: $_vaccine");
-                       Navigator.pushReplacementNamed(context, '/home');
+                       if (redirect == false) {
+                         Navigator.pushReplacementNamed(context, '/feetype');
+                       }
+                       else if (redirect == true) {
+                         _setRedirect();
+                         Navigator.pushReplacementNamed(context, '/home');
+                       }
                      }
                    else {
                      setState(() {

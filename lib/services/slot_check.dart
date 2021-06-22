@@ -2,6 +2,7 @@ import 'localdata.dart';
 import 'package:vax_app/services/cowin_api_calls.dart';
 import 'package:vax_app/services/store_data.dart';
 import 'package:vax_app/services/localdata.dart';
+import 'package:vax_app/services/front_end_calls.dart';
 
 class SlotCheck{
 
@@ -9,6 +10,8 @@ class SlotCheck{
   late User user;
   late ApiCalls apiCalls;
   late List<int> pincodeList;
+
+  FrontEndCalls frontEndCalls = FrontEndCalls();
 
 
   // Supporting function. NOT TO BE CALLED SEPARATELY!
@@ -41,8 +44,11 @@ class SlotCheck{
   // This is the function that must run in the background
   dynamic slotCheck() async {
     List<dynamic> centers = await apiCalls.centers(pincodeList);
-    if(user.wantFree == true){
+    if(user.wantFree == true && user.wantPaid == false){
       centers = filterFree(centers);
+    }
+    else if (user.wantPaid == true && user.wantFree == false) {
+      centers = filterPaid(centers);
     }
     List<String> status = [];
     int activeBens = 0;
@@ -89,6 +95,9 @@ class SlotCheck{
                 status[i] = "done";
                 booked = true;
                 bookedBens ++;
+                ben.isEnabled = false;
+                ben.bookedSlot = true;
+                await setBenListToPrefs(benList);
                 break;
                 // Send notification
               }
@@ -161,6 +170,16 @@ class SlotCheck{
     List newCenters = [];
     centers.forEach((ctr) {
       if(ctr['fee_type'] == 'Free'){
+        newCenters.add(ctr);
+      }
+    });
+    return newCenters;
+  }
+
+  List<dynamic> filterPaid(List<dynamic> centers) {
+    List newCenters = [];
+    centers.forEach((ctr) {
+      if(ctr['fee_type'] == 'Paid'){
         newCenters.add(ctr);
       }
     });
@@ -245,8 +264,8 @@ class StarterObject {
 
   dynamic startSearching() async {
     SlotCheck slotCheck = SlotCheck();
-    slotCheck.apiCalls.listen();
     await slotCheck.initialise();
+    slotCheck.apiCalls.listen();
     List<String> returnValue;
     while (starter == true) {
       print("searching");

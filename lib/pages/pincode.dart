@@ -33,6 +33,16 @@ class _PinCodeState extends State<PinCode> {
     }
   }
 
+  void _setRedirect() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    redirect = prefs.getBool('redirect');
+    if (redirect == true)
+    {
+      redirect = false;
+      prefs.setBool('redirect', false);
+    }
+  }
+
   List<String> _nullPincodes(List<String>? pincodes) {
     if (pincodes == null || pincodes.length == 0)
       {
@@ -207,6 +217,7 @@ class _PinCodeState extends State<PinCode> {
                             Navigator.pushReplacementNamed(context, '/vaccine');
                           }
                           else if (redirect == true) {
+                            _setRedirect();
                             Navigator.pushReplacementNamed(context, '/home');
                           }
                         }

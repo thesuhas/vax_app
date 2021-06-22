@@ -7,12 +7,14 @@ class User{
   late List<int>? pinList;
   late bool? isSetup;
   late bool? wantFree;
+  late bool? wantPaid;
 
   User( {
     this.phNo = 0,
     this.isSetup = false,
-    this.wantFree = false,
+    this.wantFree = true,
     this.pinList,
+    this.wantPaid = true,
   } );
 
   // Set boolean to true after he is done setting up
@@ -33,6 +35,7 @@ class User{
     mapUser['pinList'] = pinList;
     mapUser['isSetup'] = isSetup;
     mapUser['wantFree'] = wantFree;
+    mapUser['wantPaid'] = wantPaid;
     return jsonEncode(mapUser);
   }
 
@@ -48,7 +51,8 @@ class User{
         pins.add(mapUser['pinList'][i]);
       }
       pinList = pins;
-      wantFree = mapUser['wantFree'];
+      wantFree = mapUser['wantFree'].toString() == 'true';
+      wantPaid = mapUser['wantPaid'].toString() == 'true';
     }
     catch(e){
       return;
