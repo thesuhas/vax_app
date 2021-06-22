@@ -25,7 +25,7 @@ class _DropDownOTPState extends State<DropDownOTP> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[Container(
           margin: EdgeInsets.all(12),
-          width: 200,
+          width: 235,
           decoration: BoxDecoration(
               color: Colors.amberAccent[200],
               borderRadius: BorderRadius.circular(20)

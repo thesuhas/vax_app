@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart';
 import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -195,14 +196,50 @@ class ApiCalls {
     otp = null;
     await getOtp();
     if (otp == null) {
-      await Future.delayed(Duration(seconds: 2));
+      await gotOtp();
+      // await Future.delayed(Duration(seconds: 2));
     }
-    await Future.delayed(Duration(seconds: 5), () async {
-      print("delay done");
-      await validateOtp(otp.toString());
-    });
+    // await Future.delayed(Duration(seconds: 5), () async {
+    //   print("delay done");
+    await validateOtp(otp.toString());
+    // });
 
   }
+
+  Future<void> gotOtp() async{
+    while(otp == null){
+      await Future.delayed(Duration(seconds: 2));
+    }
+    return;
+  }
+
+
+  Future<dynamic> appointmentSlip(String appointmentId) async {
+    await setToken();
+    headers['Content-Type'] = 'application/pdf';
+    String url = 'https://cdn-api.co-vin.in/api/v2/appointment/appointmentslip/download?$appointmentId';
+    Response response = await get(
+        Uri.parse(url),
+        headers: headers
+    );
+    if(response.statusCode == 200){
+      // The response is the binary content of the file
+      File file = File('Appointment Slip');
+      await file.writeAsBytes(response.bodyBytes);
+      return file;
+    }
+  }
+
+  Future<dynamic> certificate(int benId) async {
+    await setToken();
+    headers['Content-Type'] = 'application/pdf';
+    String url = 'https://cdn-api.co-vin.in/api/v2/registration/certificate/download?${benId.toString()}';
+    Response response = await get(
+        Uri.parse(url),
+        headers: headers
+    );
+  }
+
 
 
 }

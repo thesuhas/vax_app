@@ -118,7 +118,7 @@ class _VaccineState extends State<Vaccine> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[Container(
                   margin: EdgeInsets.all(12),
-                  width: 200,
+                  width: 215,
                   decoration: BoxDecoration(
                       color: Colors.amberAccent[200],
                       borderRadius: BorderRadius.circular(20)

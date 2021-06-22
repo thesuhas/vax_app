@@ -38,6 +38,7 @@ dev_dependencies:
   shared_preferences: ^2.0.6
   telephony: ^0.1.4
   location: ^4.2.0
+  path_provider: ^2.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -30,7 +30,7 @@ class Welcome extends StatelessWidget {
             SizedBox(height: 90,),
             Center(
               child: SizedBox(
-                width: 120,
+                width: 130,
                 child: TextButton.icon(
                   onPressed: (){
                     Navigator.pushReplacementNamed(context, '/disclaimer');
