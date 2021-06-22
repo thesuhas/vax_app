@@ -62,7 +62,7 @@ class _BenCardState extends State<BenCard> {
   }
 
   void setColor() {
-    if (widget.ben.vaccinationStatus == "Fully Vaccinated") {
+    if (widget.ben.vaccinationStatus == "Vaccinated") {
       status = Colors.green;
     }
     else if (widget.ben.vaccinationStatus == "Partially Vaccinated") {
@@ -104,7 +104,7 @@ class _BenCardState extends State<BenCard> {
        ];
     }
     else  {
-       if ((widget.ben.vaccinationStatus == "Partially Vaccinated" && dueDateCheck() == true) || (widget.ben.vaccinationStatus == "Not Vaccinated" && widget.ben.bookedSlot == false)) {
+       if ((widget.ben.vaccinationStatus == "Partially Vaccinated" && dueDateCheck() == true) || (widget.ben.vaccinationStatus == "Not Vaccinated" && widget.ben.bookedSlot == false) && widget.ben.vaccinationStatus != "Vaccinated") {
          return <Widget>[
            Container(
              padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
@@ -135,7 +135,7 @@ class _BenCardState extends State<BenCard> {
            ),
          ];
        }
-       else if (widget.ben.vaccinationStatus != "Not Vaccinated") {
+       else if (widget.ben.vaccinationStatus == "Partially Vaccinated") {
          return <Widget>[
            Container(
              padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
@@ -154,28 +154,7 @@ class _BenCardState extends State<BenCard> {
            Container(
              padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
              child: Row(
-               children: <Widget>[
-                 Text(
-                   "Book:",
-                   style: TextStyle(
-                     color: Colors.grey[800],
-                   ),
-                 ),
-                 SizedBox(
-                   height: 24,
-                   child: Checkbox(
-                     value: isChecked,
-                     onChanged: (bool? value) {
-                       setState(() {
-                         isChecked = value!;
-                       });
-                       widget.onSelect(value!);
-                     },
-                     activeColor: Colors.black,
-                   ),
-                 ),
-
-               ],
+               children: <Widget>[],
              ),
            ),
          ];

@@ -137,6 +137,7 @@ class _HomeState extends State<Home> {
     }
     else {
       for (int i = 0; i < bens.length; i ++) {
+        print("entered");
         widgets.add(BenCard(ben: bens[i], onSelect: (bool? test) {isChecked(test, i);}, user: user));
       }
     }
