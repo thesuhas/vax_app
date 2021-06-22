@@ -104,7 +104,7 @@ class _BenCardState extends State<BenCard> {
        ];
     }
     else  {
-       if ((widget.ben.vaccinationStatus == "Partially Vaccinated" && dueDateCheck() == true && widget.ben.bookedSlot == false) || (widget.ben.vaccinationStatus == "Not Vaccinated" && widget.ben.bookedSlot == false)) {
+       if ((widget.ben.vaccinationStatus == "Partially Vaccinated" && dueDateCheck() == true) || (widget.ben.vaccinationStatus == "Not Vaccinated" && widget.ben.bookedSlot == false)) {
          return <Widget>[
            Container(
              padding: EdgeInsets.fromLTRB(0, 0, 0, 10),

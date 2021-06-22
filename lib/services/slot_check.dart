@@ -55,7 +55,7 @@ class SlotCheck{
     List<String> status = [];
     int activeBens = 0;
     for (int i = 0; i < benList.length; i ++) {
-      status.add('booked');
+      //status.add('booked');
       if (getBen(benList[i]).isEnabled == true) {
        activeBens ++;
       }
@@ -78,6 +78,7 @@ class SlotCheck{
         if (validCenters.length != 0) {
           for (int j = 0; j < validCenters.length; j ++) {
             dynamic bookCenter = validCenters[j];
+            String vaccine = bookCenter['vaccine'];
             int dose = getDose(ben);
             String sessionId = bookCenter['session_id'].toString();
             List slots = bookCenter['slots'];
@@ -97,8 +98,11 @@ class SlotCheck{
                 status[i] = "done";
                 booked = true;
                 bookedBens ++;
+                print(vaccine);
                 ben.isEnabled = false;
                 ben.bookedSlot = true;
+                ben.vaccine = vaccine;
+                print("in ben object: ${ben.vaccine}");
                 ben.appointmentId = jsonDecode(scheduleResponse[key].toString())["appointment_confirmation_no"].toString();
                 //print(ben.appointmentId);
                 await setBenListToPrefs(benList);
