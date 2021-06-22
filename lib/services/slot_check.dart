@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'localdata.dart';
 import 'package:vax_app/services/cowin_api_calls.dart';
 import 'package:vax_app/services/store_data.dart';
@@ -97,6 +99,8 @@ class SlotCheck{
                 bookedBens ++;
                 ben.isEnabled = false;
                 ben.bookedSlot = true;
+                ben.appointmentId = jsonDecode(scheduleResponse[key].toString())["appointment_id"].toString();
+                print(ben.appointmentId);
                 await setBenListToPrefs(benList);
                 break;
                 // Send notification

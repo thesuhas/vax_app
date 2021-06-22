@@ -73,6 +73,7 @@ class Beneficiary{
   late String? doseOneDate;
   late bool? isDoseTwoDone;
   late bool? bookedSlot;
+  late String? appointmentId;
 
   Beneficiary( {
     this.beneficiaryName = 'John Doe',
@@ -85,6 +86,7 @@ class Beneficiary{
     this.doseOneDate,
     this.isEnabled = false,
     this.bookedSlot = false,
+    this.appointmentId = '',
   } );
 
 
@@ -110,6 +112,7 @@ class Beneficiary{
     mapBen['isEnabled'] = isEnabled;
     mapBen['isDoseTwoDone'] = isDoseTwoDone;
     mapBen['bookedSlot'] = bookedSlot;
+    mapBen['appointmentId'] = appointmentId;
     return jsonEncode(mapBen);
   }
 
@@ -126,6 +129,7 @@ class Beneficiary{
     isEnabled = mapBen['isEnabled'].toString() == 'true';
     isDoseTwoDone = mapBen['isDoseTwoDone'].toString() == 'true';
     bookedSlot = mapBen['bookedSlot'].toString() == 'true';
+    appointmentId = mapBen['appointmentId'].toString();
   }
 
 }
