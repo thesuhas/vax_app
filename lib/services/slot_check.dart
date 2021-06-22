@@ -57,6 +57,7 @@ class SlotCheck{
     //await Future.forEach(benList, (beneficiary) async{
     for (int i = 0; i < benList.length; i ++) {
       if (activeBens == bookedBens) {
+        print("All done");
         break;
       }
       Beneficiary ben = getBen(benList[i].toString());
@@ -132,7 +133,7 @@ class SlotCheck{
         return centers;
       }
       else if(benObj.isDoseOneDone == true && benObj.isDoseTwoDone == false){
-        print("test");
+        //print("test");
         if(validDueDate(benObj.doseOneDate.toString(), benObj.vaccine.toString())){
           return validDoseTwo(centers);
         }
@@ -208,7 +209,7 @@ class SlotCheck{
     List<dynamic> newCenters = [];
     centers.forEach((center) {
       if (center['available_capacity_dose2'] > 9) {
-        print("filtered");
+        //print("filtered");
         newCenters.add(center);
       }
     });
@@ -227,7 +228,7 @@ class SlotCheck{
     }
     else{
       // For COVAXIN
-      return doseOneDate.isAfter(now.add(Duration(days: 20)));
+      return doseOneDate.isAfter(now.add(Duration(days: 27)));
     }
   }
 

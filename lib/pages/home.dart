@@ -63,12 +63,15 @@ class _HomeState extends State<Home> {
     }
   }
 
-  // void secondState() {
-  //   print("second set state");
-  //   setState(() {
-  //     widget._booking = false;
-  //   });
-  // }
+  bool checkSelect() {
+    for (int i = 0; i < bens.length; i ++)
+      {
+        if (bens[i].isEnabled == true) {
+          return true;
+        }
+      }
+    return false;
+  }
 
   void _startBooking() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -78,16 +81,17 @@ class _HomeState extends State<Home> {
       widget._booking = true;
       widget.inProcess = true;
     });
-    await starter.startSearching();
+    String? status = await starter.startSearching();
     _endBooking();
     //slotCheck.slotCheck();
-    //print(status);
+    print(status);
   }
 
   void _endBooking() async {
     print("entered end");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('booking', false);
+    starter.stopSearching();
     // setState(() {
     //   widget._booking = false;
     // });
@@ -127,7 +131,7 @@ class _HomeState extends State<Home> {
     }
     else {
       for (int i = 0; i < bens.length; i ++) {
-        widgets.add(BenCard(name: bens[i].beneficiaryName, benID: bens[i].beneficiaryId.toString(), vaccineStatus: bens[i].vaccinationStatus, vaccine: bens[i].vaccine, onSelect: (bool? test) {isChecked(test, i);},),);
+        widgets.add(BenCard(ben: bens[i], onSelect: (bool? test) {isChecked(test, i);},));
       }
     }
 
@@ -338,8 +342,33 @@ class _HomeState extends State<Home> {
                     child: Center(
                       child: !_checkBool(widget._booking) ? TextButton(
                         onPressed: () {
-                          if (!_checkBool(widget._booking)) {
-                            _startBooking();
+                          if (checkSelect()) {
+                            if (!_checkBool(widget._booking)) {
+                              _startBooking();
+                            }
+                          }
+                          else {
+                            showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text('Beneficiaries not Selected'),
+                                  content: const Text('Please select at least one Beneficiary before booking'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text(
+                                        "OK",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                  backgroundColor: Colors.amberAccent[200],
+                                )
+                            );
                           }
                         },
                         child: Text(
@@ -377,7 +406,6 @@ class _HomeState extends State<Home> {
           );
         }
       },
-
     );
   }
 }

@@ -1,18 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:vax_app/services/localdata.dart';
 
 class BenCard extends StatefulWidget {
 
   final Function(bool?) onSelect;
 
   // State Variables
-  String? name;
-  String? benID;
-  String? vaccineStatus;
-  String? vaccine; // To be passed only if at least first dose has been received
+  // String? name;
+  // String? benID;
+  // String? vaccineStatus;
+  // String? vaccine; // To be passed only if at least first dose has been received
+  late Beneficiary ben;
 
   // Constructor
-  BenCard({required this.name, required this.benID, required this.vaccineStatus, this.vaccine, required this.onSelect});
+  BenCard({required this.ben, required this.onSelect});
 
   @override
   _BenCardState createState() => _BenCardState();
@@ -24,15 +26,110 @@ class _BenCardState extends State<BenCard> {
 
   Color? status;
 
+  bool dueDateCheck() {
+    DateTime now = DateTime.now();
+    if (widget.ben.isDoseOneDone == true) {
+      List dmyList = widget.ben.doseOneDate.toString().split('-');
+      //print(dmyList);
+      DateTime doseOneDate = DateTime.utc(int.parse(dmyList[2]), int.parse(dmyList[1]), int.parse(dmyList[0]));
+      if (widget.ben.vaccine == "COVAXIN") {
+        return now.isAfter(doseOneDate.add(Duration(days: 27)));
+      }
+      else if (widget.ben.vaccine == 'COVISHIELD') {
+        return doseOneDate.isAfter(now.add(Duration(days: 83)));
+      }
+    }
+    return false;
+  }
+
+  String returnEligible() {
+    DateTime now = DateTime.now();
+    List dmyList = widget.ben.doseOneDate.toString().split('-');
+    //print(dmyList);
+    DateTime doseOneDate = DateTime.utc(int.parse(dmyList[2]), int.parse(dmyList[1]), int.parse(dmyList[0]));
+    String date;
+    if (widget.ben.vaccine == "COVAXIN") {
+      DateTime due = doseOneDate.add(Duration(days: 27));
+      date = "${due.day}-${due.month}-${due.year}";
+    }
+    else {
+      DateTime due = doseOneDate.add(Duration(days: 83));
+      date = "${due.day}-${due.month}-${due.year}";
+    }
+    return date;
+  }
+
   void setColor() {
-    if (widget.vaccineStatus == "Fully Vaccinated") {
+    if (widget.ben.vaccinationStatus == "Fully Vaccinated") {
       status = Colors.green;
     }
-    else if (widget.vaccineStatus == "Partially Vaccinated") {
+    else if (widget.ben.vaccinationStatus == "Partially Vaccinated") {
       status = Colors.blue[700];
     }
     else {
       status = Colors.red;
+    }
+  }
+
+  List<Widget> checkOrSlip() {
+     if (widget.ben.bookedSlot == true) {
+       return <Widget>[
+         TextButton(
+           onPressed: (){},
+           child: Text(
+               "Appointment Slip"
+           ),
+           style: TextButton.styleFrom(
+             backgroundColor: Colors.grey[900],
+             primary: Colors.amberAccent[200],
+             textStyle: TextStyle(
+               letterSpacing: 2,
+             ),
+           ),
+         )
+       ];
+    }
+    else  {
+       if (widget.ben.vaccinationStatus != "Fully Vaccinated" && dueDateCheck() == true) {
+         return <Widget>[
+           Row(
+             children: <Widget>[
+               Text(
+                 "Book:",
+                 style: TextStyle(
+                   color: Colors.grey[800],
+                 ),
+               ),
+               Checkbox(
+                 value: isChecked,
+                 onChanged: (bool? value) {
+                   setState(() {
+                     isChecked = value!;
+                   });
+                   widget.onSelect(value!);
+                 },
+                 activeColor: Colors.black,
+               ),
+
+             ],
+           ),
+         ];
+       }
+       else {
+         return <Widget>[
+           Container(
+             padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+             child: Text(
+               "Eligible from: ${returnEligible()}",
+               style: TextStyle(
+                  color: Colors.grey[800],
+                 fontWeight: FontWeight.bold,
+               ),
+             ),
+           ),
+         ];
+
+       }
     }
   }
 
@@ -52,7 +149,7 @@ class _BenCardState extends State<BenCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              "${widget.name}",
+              "${widget.ben.beneficiaryName}",
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
@@ -70,15 +167,15 @@ class _BenCardState extends State<BenCard> {
                   ),
                 ),
                 Text(
-                  "${widget.vaccineStatus}",
+                  "${widget.ben.vaccinationStatus}",
                   style: TextStyle(
                     color: status,
                   ),
                 ),
                 Spacer(),
-                if (widget.vaccine != null)
+                if (widget.ben.vaccine != null)
                   Text(
-                    "Vaccine: ${widget.vaccine}",
+                    "Vaccine: ${widget.ben.vaccine}",
                     style: TextStyle(
                       color: Colors.grey[800],
                       fontWeight: FontWeight.bold,
@@ -88,41 +185,14 @@ class _BenCardState extends State<BenCard> {
             ),
             SizedBox(height: 10,),
             Text(
-              "Beneficiary ID: ${widget.benID}",
+              "Beneficiary ID: ${widget.ben.beneficiaryId}",
               style: TextStyle(
                 color: Colors.grey[800],
               ),
             ),
             SizedBox(height: 10,),
             Row(
-              children: <Widget>[
-                if (widget.vaccineStatus != "Fully Vaccinated")
-                Row(
-                  children: <Widget>[
-                    Text(
-                      "Book:",
-                      style: TextStyle(
-                        color: Colors.grey[800],
-                      ),
-                    ),
-                    Checkbox(
-                      value: isChecked,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          isChecked = value!;
-                        });
-                        widget.onSelect(value!);
-                      },
-                      activeColor: Colors.black,
-                    ),
-                  ],
-                ),
-                Spacer(),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.delete),
-                ),
-              ],
+              children: checkOrSlip(),
             ),
           ],
         ),
