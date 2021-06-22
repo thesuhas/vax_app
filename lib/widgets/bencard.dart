@@ -104,7 +104,7 @@ class _BenCardState extends State<BenCard> {
        ];
     }
     else  {
-       if (widget.ben.vaccinationStatus != "Fully Vaccinated" && dueDateCheck() == true) {
+       if ((widget.ben.vaccinationStatus == "Partly Vaccinated" && dueDateCheck() == true)) {
          return <Widget>[
            Container(
              padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
@@ -135,7 +135,7 @@ class _BenCardState extends State<BenCard> {
            ),
          ];
        }
-       else {
+       else if (widget.ben.vaccinationStatus != "Not Vaccinated") {
          return <Widget>[
            Container(
              padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
@@ -148,7 +148,37 @@ class _BenCardState extends State<BenCard> {
              ),
            ),
          ];
+       }
+       else {
+         return <Widget>[
+           Container(
+             padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+             child: Row(
+               children: <Widget>[
+                 Text(
+                   "Book:",
+                   style: TextStyle(
+                     color: Colors.grey[800],
+                   ),
+                 ),
+                 SizedBox(
+                   height: 24,
+                   child: Checkbox(
+                     value: isChecked,
+                     onChanged: (bool? value) {
+                       setState(() {
+                         isChecked = value!;
+                       });
+                       widget.onSelect(value!);
+                     },
+                     activeColor: Colors.black,
+                   ),
+                 ),
 
+               ],
+             ),
+           ),
+         ];
        }
     }
   }

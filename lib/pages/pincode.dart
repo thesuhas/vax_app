@@ -24,6 +24,26 @@ class _PinCodeState extends State<PinCode> {
 
   bool? redirect;
 
+  Set<String> toSet(List<String?> pins) {
+    Set<String> pinsSet = {};
+      pins.forEach((element) {
+        if (element != null && element != '') {
+          pinsSet.add(element);
+        }
+      });
+    return pinsSet;
+  }
+
+  List<String> filterList(List<String?> pins) {
+    List<String> filtered = [];
+    pins.forEach((element) {
+      if (element != '' && element != null) {
+        filtered.add(element);
+      }
+    });
+    return filtered;
+  }
+
   void _checkRedirect() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     redirect = prefs.getBool('redirect');
@@ -70,7 +90,10 @@ class _PinCodeState extends State<PinCode> {
     }
     return converted;
   }
-  
+
+  // bool duplicate() {
+  //   chosen.toSet().forEach((element) { });
+  // }
 
   bool isError = false;
   String errorText = '';
@@ -189,16 +212,18 @@ class _PinCodeState extends State<PinCode> {
                     width: 100,
                     child: TextButton(
                       onPressed: () {
-                        print("Chosen Pincodes: $chosen");
+                        print("Chosen Pincodes: ${filterList(chosen).length}");
+                        print("Chosen set: ${toSet(chosen)} ${toSet(chosen).length}");
+                        //chosen.toSet().forEach((element) {print(element);});
                         // Validation of inputs
                         if (chosen.contains('') && chosen.where((element) => element == '').length == 5) {
-
                           setState(() {
                             isError = true;
                             errorText = "Pincodes not chosen";
                           });
                         }
-                        else if (chosen.toSet().toList().length != chosen.length && !chosen.toSet().toList().contains('')) {
+                        else if (toSet(chosen).length != filterList(chosen).length) {
+                          print("duplicate");
                           setState(() {
                             errorText = "Duplicate pincodes chosen";
                             isError = true;
@@ -210,16 +235,19 @@ class _PinCodeState extends State<PinCode> {
                               isError = false;
                             });
                           }
+
                           // Saving pincodes
                           frontEndCalls.setPincodeList(_convert(chosen));
                           //_setUp();
                           if (redirect == false) {
-                            Navigator.pushReplacementNamed(context, '/vaccine');
+                            Navigator.pushReplacementNamed(
+                                context, '/vaccine');
                           }
                           else if (redirect == true) {
                             _setRedirect();
                             Navigator.pushReplacementNamed(context, '/home');
                           }
+
                         }
                       },
                       child: Text(
