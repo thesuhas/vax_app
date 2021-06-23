@@ -98,7 +98,7 @@ class SlotCheck{
             for (var key in scheduleResponse.keys) {
               if (key == 200 && booked == false) {
                 // Refresh beneficiaries
-                status[i] = "done";
+                status.add('done');
                 booked = true;
                 bookedBens ++;
                 print(vaccine);
@@ -114,11 +114,11 @@ class SlotCheck{
               }
               else if (key == 409 && booked == false) {
                 // Fully booked
-                status[i] = "fully booked";
+                status.add('fully booked');
               }
               else if (booked == false) {
                 // Something's wrong. Bad request or unauthenticated access or server error
-                status[i] = "error";
+                status.add('error');
               }
             }
             if (booked == true) {
@@ -128,7 +128,7 @@ class SlotCheck{
           }
         }
         else {
-          status[i] = "no centers";
+          status.add('no centers');
         }
       }
     }
