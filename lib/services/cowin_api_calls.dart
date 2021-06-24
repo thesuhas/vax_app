@@ -7,6 +7,7 @@ import 'package:vax_app/services/localdata.dart';
 import 'package:telephony/telephony.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:open_file/open_file.dart';
 
 backgroundMessageHandler(SmsMessage message) async {
   //Handle background message
@@ -228,32 +229,38 @@ class ApiCalls {
   }
 
 
-  Future<dynamic> appointmentSlip(Beneficiary beneficiary) async {
+
+
+  Future<void> appointmentSlip(Beneficiary beneficiary) async {
     await setToken();
     headers['Content-Type'] = 'application/pdf';
     String appointmentId = beneficiary.appointmentId.toString();
-    String url = 'https://cdn-api.co-vin.in/api/v2/appointment/appointmentslip/download?$appointmentId';
+    String url = 'https://cdn-api.co-vin.in/api/v2/appointment/appointmentslip/download?appointment_id=$appointmentId';
     Response response = await get(
         Uri.parse(url),
         headers: headers
     );
-    print(response.statusCode);
     if(response.statusCode == 200){
       // The response is the binary content of the file
       if(await checkPerms() == true) {
         Directory? directory = await getExternalStorageDirectory();
-        String path = "${directory!.path}/Download";
-        File file = File('$path/Appointment Slip - ${beneficiary.beneficiaryName.toString()}.pdf');
+        String path = "${directory!.path}/Appointment Slip - ${beneficiary.beneficiaryName.toString()}.pdf'";
+        File file = File(path);
+        if(await file.exists() == true){
+          await file.delete();
+        }
+        await file.create();
         await file.writeAsBytes(response.bodyBytes);
+        OpenFile.open(path);
       }
     }
   }
 
-  Future<dynamic> certificate(Beneficiary beneficiary) async {
+  Future<void> certificate(Beneficiary beneficiary) async {
     await setToken();
     headers['Content-Type'] = 'application/pdf';
     String benId = beneficiary.beneficiaryId.toString();
-    String url = 'https://cdn-api.co-vin.in/api/v2/registration/certificate/download?$benId';
+    String url = 'https://cdn-api.co-vin.in/api/v2/registration/certificate/download?beneficiary_reference_id=$benId';
     Response response = await get(
         Uri.parse(url),
         headers: headers
@@ -261,9 +268,14 @@ class ApiCalls {
     if(response.statusCode == 200){
       if(await checkPerms() == true) {
         Directory? directory = await getExternalStorageDirectory();
-        String path = "${directory!.path}/Download";
-        File file = File('$path/Certificate - ${beneficiary.beneficiaryName.toString()}.pdf');
+        String path = "${directory!.path}/Certificate - ${beneficiary.beneficiaryName.toString()}.pdf";
+        File file = File(path);
+        if(await file.exists() == true){
+          await file.delete();
+        }
+        await file.create();
         await file.writeAsBytes(response.bodyBytes);
+        OpenFile.open(path);
       }
 
     }

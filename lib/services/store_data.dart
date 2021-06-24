@@ -43,6 +43,7 @@ class StoreData{
       List<dynamic> appointments = eachBen['appointments'];
       if(appointments.length == 1){
         beneficiary.bookedSlot = true;
+        beneficiary.appointmentId = eachBen['appointments'][0]['appointment_id'];
       }
     }
     else if(vaccinationStatus == 'Partially Vaccinated'){
@@ -52,6 +53,7 @@ class StoreData{
       List<dynamic> appointments = eachBen['appointments'];
       if(appointments.length == 2){
         beneficiary.bookedSlot = true;
+        beneficiary.appointmentId = eachBen['appointments'][1]['appointment_id'];
       }
     }
     else if(vaccinationStatus == 'Vaccinated'){
