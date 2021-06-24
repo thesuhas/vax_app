@@ -106,6 +106,23 @@ class _BenCardState extends State<BenCard> {
          )
        ];
     }
+    else if (widget.ben.isDoseTwoDone == true) {
+       return <Widget>[
+         TextButton(
+           onPressed: () {frontEndCalls.downloadCert(widget.ben);},
+           child: Text(
+               "Certificate"
+           ),
+           style: TextButton.styleFrom(
+             backgroundColor: Colors.grey[900],
+             primary: Colors.lightGreenAccent,
+             textStyle: TextStyle(
+               letterSpacing: 2,
+             ),
+           ),
+         )
+       ];
+     }
     else  {
        if ((widget.ben.vaccinationStatus == "Partially Vaccinated" && dueDateCheck() == true) || (widget.ben.vaccinationStatus == "Not Vaccinated" && widget.ben.bookedSlot == false) && widget.ben.vaccinationStatus != "Vaccinated") {
          return <Widget>[
