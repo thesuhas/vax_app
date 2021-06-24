@@ -52,6 +52,10 @@ class _HomeState extends State<Home> {
     //print("bencard ${bens[index].isEnabled} ${bens[index].beneficiaryName}");
   }
 
+  void isCheckedNew(bool? value, Beneficiary beneficiary){
+    beneficiary.isEnabled = value!;
+  }
+
   void _checkBooking() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     widget._booking = prefs.getBool('booking');
@@ -143,10 +147,14 @@ class _HomeState extends State<Home> {
       ));
     }
     else {
-      for (int i = 0; i < bens.length; i ++) {
+      // for (int i = 0; i < bens.length; i ++) {
+      //   print("entered widget gen");
+      //   widgets.add(BenCard(ben: bens[i], onSelect: (bool? test) {isChecked(test, i);}, user: user));
+      // }
+      bens.forEach((ben) {
         print("entered widget gen");
-        widgets.add(BenCard(ben: bens[i], onSelect: (bool? test) {isChecked(test, i);}, user: user));
-      }
+        widgets.add(BenCard(ben: ben, onSelect: (bool? test) {isCheckedNew(test, ben);}, user: user));
+      });
     }
 
   }

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:vax_app/services/cowin_api_calls.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vax_app/services/localdata.dart';
@@ -60,6 +61,16 @@ class FrontEndCalls{
       benObjList.add(oneBen);
     });
     return benObjList;
+  }
+
+  void downloadAppoint(Beneficiary beneficiary) async {
+    ApiCalls apiCalls = ApiCalls();
+    await apiCalls.appointmentSlip(beneficiary);
+  }
+
+  void downloadCert(Beneficiary beneficiary) async {
+    ApiCalls apiCalls = ApiCalls();
+    await apiCalls.certificate(beneficiary);
   }
 
 }

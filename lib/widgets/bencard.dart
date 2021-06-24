@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:vax_app/services/front_end_calls.dart';
 import 'package:vax_app/services/localdata.dart';
 
 class BenCard extends StatefulWidget {
@@ -27,6 +28,8 @@ class _BenCardState extends State<BenCard> {
   bool? isChecked = false;
 
   Color? status;
+
+  FrontEndCalls frontEndCalls = FrontEndCalls();
 
   bool dueDateCheck() {
     DateTime now = DateTime.now();
@@ -89,7 +92,7 @@ class _BenCardState extends State<BenCard> {
      if (widget.ben.bookedSlot == true && widget.ben.isDoseTwoDone == false) {
        return <Widget>[
          TextButton(
-           onPressed: (){},
+           onPressed: () {frontEndCalls.downloadAppoint(widget.ben);},
            child: Text(
                "Appointment Slip"
            ),

@@ -5,6 +5,8 @@ import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vax_app/services/localdata.dart';
 import 'package:telephony/telephony.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 backgroundMessageHandler(SmsMessage message) async {
   //Handle background message
@@ -226,30 +228,55 @@ class ApiCalls {
   }
 
 
-  Future<dynamic> appointmentSlip(String appointmentId) async {
+  Future<dynamic> appointmentSlip(Beneficiary beneficiary) async {
     await setToken();
     headers['Content-Type'] = 'application/pdf';
+    String appointmentId = beneficiary.appointmentId.toString();
     String url = 'https://cdn-api.co-vin.in/api/v2/appointment/appointmentslip/download?$appointmentId';
     Response response = await get(
         Uri.parse(url),
         headers: headers
     );
+    print(response.statusCode);
     if(response.statusCode == 200){
       // The response is the binary content of the file
-      File file = File('Appointment Slip');
-      await file.writeAsBytes(response.bodyBytes);
-      return file;
+      if(await checkPerms() == true) {
+        Directory? directory = await getExternalStorageDirectory();
+        String path = "${directory!.path}/Download";
+        File file = File('$path/Appointment Slip - ${beneficiary.beneficiaryName.toString()}.pdf');
+        await file.writeAsBytes(response.bodyBytes);
+      }
     }
   }
 
-  Future<dynamic> certificate(int benId) async {
+  Future<dynamic> certificate(Beneficiary beneficiary) async {
     await setToken();
     headers['Content-Type'] = 'application/pdf';
-    String url = 'https://cdn-api.co-vin.in/api/v2/registration/certificate/download?${benId.toString()}';
+    String benId = beneficiary.beneficiaryId.toString();
+    String url = 'https://cdn-api.co-vin.in/api/v2/registration/certificate/download?$benId';
     Response response = await get(
         Uri.parse(url),
         headers: headers
     );
+    if(response.statusCode == 200){
+      if(await checkPerms() == true) {
+        Directory? directory = await getExternalStorageDirectory();
+        String path = "${directory!.path}/Download";
+        File file = File('$path/Certificate - ${beneficiary.beneficiaryName.toString()}.pdf');
+        await file.writeAsBytes(response.bodyBytes);
+      }
+
+    }
+  }
+
+  Future<bool> checkPerms() async {
+    PermissionStatus status = await Permission.storage.request();
+    if(status.isGranted){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 
 

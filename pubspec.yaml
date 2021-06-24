@@ -39,6 +39,7 @@ dev_dependencies:
   telephony: ^0.1.4
   location: ^4.2.0
   path_provider: ^2.0.2
+  permission_handler: ^8.1.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
