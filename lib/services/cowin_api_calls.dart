@@ -268,10 +268,10 @@ class ApiCalls {
     if(response.statusCode == 200){
       if(await checkPerms() == true) {
         Directory? directory = await getExternalStorageDirectory();
-        // directory = directory!.parent.parent.parent.parent;
-        String path = "${directory!.path}/Download/Certificate - ${beneficiary.beneficiaryName.toString()}.pdf";
+        directory = directory!.parent.parent.parent.parent;
+        String path = "${directory.path}/Download/Certificate - ${beneficiary.beneficiaryName.toString()}.pdf";
         File file = File(path);
-        if(await file.exists() == true){
+        if(file.existsSync() == true){
           await file.delete();
         }
         await file.create();
