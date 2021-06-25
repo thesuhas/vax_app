@@ -172,7 +172,7 @@ class ApiCalls {
   }
 
   Future<Map<int, String>> schedule(int dose, String sessionId, String slot, int centerId, List<int> beneficiaries) async {
-    await bookToken();
+    await setToken();
     String url = 'https://cdn-api.co-vin.in/api/v2/appointment/schedule';
     Object? data = {
       'dose': dose,
@@ -268,7 +268,7 @@ class ApiCalls {
     if(response.statusCode == 200){
       if(await checkPerms() == true) {
         Directory? directory = await getExternalStorageDirectory();
-        directory = directory!.parent.parent.parent.parent;
+        // directory = directory!.parent.parent.parent.parent;
         String path = "${directory!.path}/Download/Certificate - ${beneficiary.beneficiaryName.toString()}.pdf";
         File file = File(path);
         if(await file.exists() == true){

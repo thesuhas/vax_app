@@ -100,8 +100,8 @@ class _BenCardState extends State<BenCard> {
       showDialog<String>(
         context: context,
         builder: (BuildContext context) =>  AlertDialog(
-          title: const Text('Booking in Progress'),
-          content: const Text('Cannot change Pincode during Booking'),
+          title: const Text('Unable to cancel'),
+          content: const Text('Try again after 5 minutes'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
