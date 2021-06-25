@@ -63,7 +63,7 @@ class _HomeState extends State<Home> {
     beneficiary.isEnabled = value!;
   }
 
-  void _checkBooking() async {
+  Future<void> _checkBooking() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     widget._booking = prefs.getBool('booking');
     if (widget._booking == null || widget._booking == false) {
@@ -133,8 +133,9 @@ class _HomeState extends State<Home> {
     String userStr = await getUserFromPrefs();
     user = getUser(userStr);
     await loadBen();
-    _checkBooking();
-    _resetUpdate();
+    await _checkBooking();
+    await _resetUpdate();
+    widgetBen();
   }
 
   void widgetBen () {
@@ -159,7 +160,7 @@ class _HomeState extends State<Home> {
       //   widgets.add(BenCard(ben: bens[i], onSelect: (bool? test) {isChecked(test, i);}, user: user));
       // }
       bens.forEach((ben) {
-        //print("entered widget gen");
+        print("entered widget gen");
         widgets.add(BenCard(ben: ben, onSelect: (bool? test) {isCheckedNew(test, ben);}, user: user, checked: benChecked(ben.isEnabled),));
       });
     }
@@ -171,7 +172,7 @@ class _HomeState extends State<Home> {
     prefs.setBool('updateBen', true);
   }
 
-  void _resetUpdate() async {
+  Future<void> _resetUpdate() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('updateBen', false);
   }
@@ -189,11 +190,12 @@ class _HomeState extends State<Home> {
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done && widget.inProcess == false) {
           return Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              color: Colors.amberAccent[200],
+            ),
           );
         }
         else {
-          widgetBen();
           return Scaffold(
             appBar: AppBar(
               title: Text(
