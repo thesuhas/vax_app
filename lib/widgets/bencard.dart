@@ -286,7 +286,9 @@ class _BenCardState extends State<BenCard> {
                 color: Colors.grey[800],
               ),
             ),
+            if (widget.ben.vaccinationStatus != "Vaccinated")
             SizedBox(height: 10,),
+            if (widget.ben.vaccinationStatus != "Vaccinated")
             Text(
               "Fee Type: ${getFeeType()}",
               style: TextStyle(
