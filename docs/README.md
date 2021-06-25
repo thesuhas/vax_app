@@ -1,4 +1,14 @@
-# CoVaccine
+# Important to note
+
+**IMMEDIATELY STOP USING THIS APP FOR SEARCHING OR BOOKING VACCINE SLOTS ON COWIN PORTAL - BY CONTINUING TO USE IT YOU ARE VIOLATING THE [TERMS OF SERVICE](https://www.cowin.gov.in/terms-condition) PUBLISHED BY MINISTRY OF HEALTH AND FAMILY WELFARE, GOVERNMENT OF INDIA**
+
+
+This repository is just a proof of concept and I strongly advise you to NOT use this app for booking your vaccine slots - doing so, may load the cowin servers and violate the terms of use. You might get yourself blocked from using cowin portal by using this extension. If detected, you may have to face legal actions from cowin portal or the Government Of India.
+
+Make sure you are aware of the "Terms of Service" published by Ministry of Health and Family Welfare, Government of India.
+Here are the "Terms of Service" published by Ministry of Health and Family Welfare, Government of India: [https://www.cowin.gov.in/terms-condition](https://www.cowin.gov.in/terms-condition)
+
+# CoVaccine - Your one shop stop for Vaccine Slot Booking Process in India
 
 <p align="center">
     <a href="https://github.com/thesuhas/vax_app/issues" alt="issues">
