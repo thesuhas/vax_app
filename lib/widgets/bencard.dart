@@ -14,11 +14,12 @@ class BenCard extends StatefulWidget {
   // String? vaccineStatus;
   // String? vaccine; // To be passed only if at least first dose has been received
   late Beneficiary ben;
+  late bool checked;
 
   late User user;
 
   // Constructor
-  BenCard({required this.ben, required this.onSelect, required this.user});
+  BenCard({required this.ben, required this.onSelect, required this.user, required this.checked});
 
   @override
   _BenCardState createState() => _BenCardState();
@@ -26,7 +27,6 @@ class BenCard extends StatefulWidget {
 
 class _BenCardState extends State<BenCard> {
 
-  bool? isChecked = false;
 
   Color? status;
 
@@ -186,10 +186,10 @@ class _BenCardState extends State<BenCard> {
                  SizedBox(
                    height: 24,
                    child: Checkbox(
-                     value: isChecked,
+                     value: widget.checked,
                      onChanged: (bool? value) {
                        setState(() {
-                         isChecked = value!;
+                         widget.checked = value!;
                        });
                        widget.onSelect(value!);
                      },

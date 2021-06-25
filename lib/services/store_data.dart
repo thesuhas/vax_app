@@ -51,10 +51,26 @@ class StoreData{
       beneficiary.vaccine = eachBen['vaccine'].toString().toUpperCase();
       beneficiary.doseOneDate = eachBen['dose1_date'].toString();
       List<dynamic> appointments = eachBen['appointments'];
-      if(appointments.length == 2){
-        beneficiary.bookedSlot = true;
-        beneficiary.appointmentId = eachBen['appointments'][1]['appointment_id'];
+      bool dose2 = false;
+      for (int k = 0; k < appointments.length; k ++) {
+        for (var key in appointments[k].keys) {
+          if (key == "dose") {
+            if (appointments[k][key] == 2) {
+              beneficiary.bookedSlot = true;
+              beneficiary.appointmentId = appointments[k]['appointment_id'];
+              dose2 = true;
+              break;
+            }
+          }
+        }
+        if (dose2 == true) {
+          break;
+        }
       }
+      // if(appointments.length == 2){
+      //   beneficiary.bookedSlot = true;
+      //   beneficiary.appointmentId = eachBen['appointments'][1]['appointment_id'];
+      // }
     }
     else if(vaccinationStatus == 'Vaccinated'){
       beneficiary.isDoseOneDone = true;

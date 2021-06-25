@@ -40,6 +40,13 @@ class _HomeState extends State<Home> {
       //print(bens);
     }
   }
+  
+  bool benChecked(bool? checked) {
+    if (checked == null) {
+      return false;
+    }
+    return checked;
+  }
 
 
   void _redirect() async {
@@ -152,8 +159,8 @@ class _HomeState extends State<Home> {
       //   widgets.add(BenCard(ben: bens[i], onSelect: (bool? test) {isChecked(test, i);}, user: user));
       // }
       bens.forEach((ben) {
-        print("entered widget gen");
-        widgets.add(BenCard(ben: ben, onSelect: (bool? test) {isCheckedNew(test, ben);}, user: user));
+        //print("entered widget gen");
+        widgets.add(BenCard(ben: ben, onSelect: (bool? test) {isCheckedNew(test, ben);}, user: user, checked: benChecked(ben.isEnabled),));
       });
     }
 

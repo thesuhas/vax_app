@@ -145,7 +145,7 @@ class ApiCalls {
         validateOtp(otp, counter: counter);
       }
     });
-    print(response.statusCode);
+    //print(response.statusCode);
     print(response.body);
     if (response.statusCode == 200) {
       var resp = jsonDecode(response.body);
@@ -232,55 +232,82 @@ class ApiCalls {
 
 
   Future<void> appointmentSlip(Beneficiary beneficiary) async {
-    await setToken();
-    headers['Content-Type'] = 'application/pdf';
-    String appointmentId = beneficiary.appointmentId.toString();
-    String url = 'https://cdn-api.co-vin.in/api/v2/appointment/appointmentslip/download?appointment_id=$appointmentId';
-    Response response = await get(
-        Uri.parse(url),
-        headers: headers
-    );
-    if(response.statusCode == 200){
-      // The response is the binary content of the file
-      if(await checkPerms() == true) {
-        Directory? directory = await getExternalStorageDirectory();
-        String path = "${directory!.path}/Appointment Slip - ${beneficiary.beneficiaryName.toString()}.pdf'";
-        File file = File(path);
-        if(await file.exists() == true){
-          await file.delete();
-        }
-        await file.create();
-        await file.writeAsBytes(response.bodyBytes);
+    if(await checkPerms() == true) {
+      Directory? directory = await getExternalStorageDirectory();
+      directory = directory!.parent.parent.parent.parent;
+      String path = "${directory.path}/Download/Appointment Slip - ${beneficiary.beneficiaryName.toString()}.pdf";
+      File file = File(path);
+      if(file.existsSync() == true) {
         OpenFile.open(path);
       }
+      else {
+        await setToken();
+        headers['Content-Type'] = 'application/pdf';
+        String appointmentId = beneficiary.appointmentId.toString();
+        String url = "https://cdn-api.co-vin.in/api/v2/appointment/appointmentslip/download?appointment_id=$appointmentId";
+        Response response = await get(
+            Uri.parse(url),
+            headers: headers
+        );
+        if(response.statusCode == 200){
+          await file.create();
+          await file.writeAsBytes(response.bodyBytes);
+          OpenFile.open(path);
+        }
+      }
     }
+    // await setToken();
+    // headers['Content-Type'] = 'application/pdf';
+    // String appointmentId = beneficiary.appointmentId.toString();
+    // String url = 'https://cdn-api.co-vin.in/api/v2/appointment/appointmentslip/download?appointment_id=$appointmentId';
+    // Response response = await get(
+    //     Uri.parse(url),
+    //     headers: headers
+    // );
+    // if(response.statusCode == 200){
+    //   // The response is the binary content of the file
+    //   if(await checkPerms() == true) {
+    //     Directory? directory = await getExternalStorageDirectory();
+    //     String path = "${directory!.path}/Appointment Slip - ${beneficiary.beneficiaryName.toString()}.pdf";
+    //     File file = File(path);
+    //     if(await file.exists() == true){
+    //       await file.delete();
+    //     }
+    //     await file.create();
+    //     await file.writeAsBytes(response.bodyBytes);
+    //     OpenFile.open(path);
+    //   }
+    // }
   }
 
   Future<void> certificate(Beneficiary beneficiary) async {
-    await setToken();
-    headers['Content-Type'] = 'application/pdf';
-    String benId = beneficiary.beneficiaryId.toString();
-    String url = 'https://cdn-api.co-vin.in/api/v2/registration/certificate/download?beneficiary_reference_id=$benId';
-    Response response = await get(
-        Uri.parse(url),
-        headers: headers
-    );
-    if(response.statusCode == 200){
-      if(await checkPerms() == true) {
-        Directory? directory = await getExternalStorageDirectory();
-        directory = directory!.parent.parent.parent.parent;
-        String path = "${directory.path}/Download/Certificate - ${beneficiary.beneficiaryName.toString()}.pdf";
-        File file = File(path);
-        if(file.existsSync() == true){
-          await file.delete();
-        }
-        await file.create();
-        await file.writeAsBytes(response.bodyBytes);
+    if(await checkPerms() == true) {
+      Directory? directory = await getExternalStorageDirectory();
+      directory = directory!.parent.parent.parent.parent;
+      String path = "${directory.path}/Download/Certificate - ${beneficiary
+          .beneficiaryName.toString()}.pdf";
+      File file = File(path);
+      if(file.existsSync() == true) {
         OpenFile.open(path);
       }
-
+      else {
+        await setToken();
+        headers['Content-Type'] = 'application/pdf';
+        String benId = beneficiary.beneficiaryId.toString();
+        String url = 'https://cdn-api.co-vin.in/api/v2/registration/certificate/download?beneficiary_reference_id=$benId';
+        Response response = await get(
+            Uri.parse(url),
+            headers: headers
+        );
+        if(response.statusCode == 200){
+            await file.create();
+            await file.writeAsBytes(response.bodyBytes);
+            OpenFile.open(path);
+          }
+        }
+      }
     }
-  }
+
 
   Future<String> cancel(Beneficiary beneficiary) async {
     await setToken();
@@ -296,6 +323,7 @@ class ApiCalls {
       headers: headers,
       body: jsonEncode(data)
     );
+    print(beneficiary.appointmentId);
     if(response.statusCode == 204){
       return 'done';
     }
