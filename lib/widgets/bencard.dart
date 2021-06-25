@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vax_app/services/front_end_calls.dart';
 import 'package:vax_app/services/localdata.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BenCard extends StatefulWidget {
 
@@ -88,6 +89,38 @@ class _BenCardState extends State<BenCard> {
     }
   }
 
+  void cancel(Beneficiary beneficiary) async {
+    String resp = await frontEndCalls.cancelAppointment(beneficiary);
+    if(resp == 'done') {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setBool('updateBen', true);
+      Navigator.pushReplacementNamed(context, '/loading');
+    }
+    else{
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) =>  AlertDialog(
+          title: const Text('Booking in Progress'),
+          content: const Text('Cannot change Pincode during Booking'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                "OK",
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            )
+          ],
+          backgroundColor: Colors.amberAccent[200],
+        )
+      );
+    }
+  }
+
   List<Widget> checkOrSlip() {
      if (widget.ben.bookedSlot == true && widget.ben.isDoseTwoDone == false) {
        return <Widget>[
@@ -101,6 +134,20 @@ class _BenCardState extends State<BenCard> {
              primary: Colors.amberAccent[200],
              textStyle: TextStyle(
                letterSpacing: 2,
+             ),
+           ),
+         ),
+         SizedBox(width: 5.0,),
+         TextButton(
+             onPressed: () {cancel(widget.ben);},
+             child: Text(
+               "Cancel"
+             ),
+             style: TextButton.styleFrom(
+              backgroundColor: Colors.grey[900],
+              primary: Colors.redAccent[200],
+              textStyle: TextStyle(
+              letterSpacing: 2,
              ),
            ),
          )

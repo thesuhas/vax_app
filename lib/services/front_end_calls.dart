@@ -3,6 +3,7 @@ import 'package:vax_app/services/cowin_api_calls.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vax_app/services/localdata.dart';
 import 'package:vax_app/services/store_data.dart';
+import 'package:vax_app/pages/home.dart';
 
 class FrontEndCalls{
 
@@ -71,6 +72,12 @@ class FrontEndCalls{
   void downloadCert(Beneficiary beneficiary) async {
     ApiCalls apiCalls = ApiCalls();
     await apiCalls.certificate(beneficiary);
+  }
+
+  Future<String> cancelAppointment(Beneficiary beneficiary) async {
+    ApiCalls apiCalls = ApiCalls();
+    String resp = await apiCalls.cancel(beneficiary);
+    return resp;
   }
 
 }

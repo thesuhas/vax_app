@@ -60,6 +60,7 @@ class StoreData{
       beneficiary.isDoseOneDone = true;
       beneficiary.isDoseTwoDone = true;
       beneficiary.bookedSlot = false;
+      beneficiary.vaccine = eachBen['vaccine'].toString().toUpperCase();
     }
 
 

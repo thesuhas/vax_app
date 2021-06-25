@@ -268,7 +268,8 @@ class ApiCalls {
     if(response.statusCode == 200){
       if(await checkPerms() == true) {
         Directory? directory = await getExternalStorageDirectory();
-        String path = "${directory!.path}/Certificate - ${beneficiary.beneficiaryName.toString()}.pdf";
+        directory = directory!.parent.parent.parent.parent;
+        String path = "${directory!.path}/Download/Certificate - ${beneficiary.beneficiaryName.toString()}.pdf";
         File file = File(path);
         if(await file.exists() == true){
           await file.delete();
@@ -279,6 +280,27 @@ class ApiCalls {
       }
 
     }
+  }
+
+  Future<String> cancel(Beneficiary beneficiary) async {
+    await setToken();
+    List<int> benList = [int.parse(beneficiary.beneficiaryId.toString())];
+    String appointmentId = beneficiary.appointmentId.toString();
+    String url = 'https://cdn-api.co-vin.in/api/v2/appointment/cancel';
+    Object? data = {
+      'appointment_id': appointmentId,
+      'beneficiariesToCancel': benList
+    };
+    Response response = await post(
+      Uri.parse(url),
+      headers: headers,
+      body: jsonEncode(data)
+    );
+    if(response.statusCode == 204){
+      return 'done';
+    }
+    return 'failed';
+
   }
 
   Future<bool> checkPerms() async {
