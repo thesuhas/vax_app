@@ -25,20 +25,12 @@ A Flutter-Based Android app that automates the entire CoWIN booking portal. From
 this app completely rids the user of the hassle of booking from the CoWIN site. In addition, one can download appointment slips, certificates and even cancel appointments from here.
 
 
-Download the required modules by using the following command:
-
-`pip3 install -r requirements.txt`
-
-If you wish to contribute to the bot, run these steps:
+If you wish to contribute to this app, do these steps:
 
 1. Fork this repository
 
-2. Create a new branch called `beta-username`
+2. Do whatever changes you wish to do and create a pull request with the following information furnished in the request message: `The functionality you wish to change/add | What did you change/add`
 
-3. Do whatever changes you wish to do and create a pull request with the following information furnished in the request message: `The functionality you wish to change/add | What did you change/add`
-
-4. Send a review request to any of the following members: `thesuhas`, `sach-12`.
-
-5. Wait for approval for reviewers. Your PR may be directly accepted or requested for further changes.
+3. Wait for approval for reviewers. Your PR may be directly accepted or requested for further changes.
 
 **Under no circumstances is anyone allowed to merge to the main branch.**
