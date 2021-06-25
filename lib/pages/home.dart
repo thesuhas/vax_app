@@ -319,7 +319,7 @@ class _HomeState extends State<Home> {
                         onTap: () {
                           if (!_checkBool(widget._booking)) {
                             _redirect();
-                            Navigator.pushReplacementNamed(context, '/vaccine');
+                            Navigator.pushReplacementNamed(context, '/feetype');
                           }
                           else {
                             showDialog<String>(
