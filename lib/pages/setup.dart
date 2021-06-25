@@ -1,6 +1,5 @@
   import 'package:flutter/material.dart';
   import 'package:shared_preferences/shared_preferences.dart';
-  String? key;
   class Setup extends StatefulWidget {
     @override
     _SetupState createState() => _SetupState();
@@ -9,13 +8,13 @@
   class _SetupState extends State<Setup> {
     // Text Controller to retrieve Text
     final myController = TextEditingController();
-
+    String? key;
 
     Future _check() async {
       SharedPreferences pref = await SharedPreferences.getInstance();
       // pref.clear();
       key = pref.getString('phoneNumber');
-        print(key);
+      print(key);
       print("check called");
     }
 
@@ -81,6 +80,7 @@
                 child: SizedBox(
                   width: 150,
                   child: TextField(
+
                     controller: myController,
                     autofocus: true,
                     keyboardType: TextInputType.phone,
