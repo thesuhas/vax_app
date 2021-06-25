@@ -311,7 +311,7 @@ class ApiCalls {
             .toString()}.pdf";
         File file = File(path);
         if (file.existsSync() == true) {
-          await file.delete();
+          file.deleteSync();
         }
       }
       return 'done';

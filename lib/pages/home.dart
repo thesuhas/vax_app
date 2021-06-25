@@ -37,7 +37,6 @@ class _HomeState extends State<Home> {
     if (widget._booking == false || widget._booking == null) {
       widget.beneficiaries = await getBenListFromPrefs();
       bens = frontEndCalls.benStrToObj(widget.beneficiaries);
-      //print(bens);
     }
   }
   
@@ -56,7 +55,7 @@ class _HomeState extends State<Home> {
 
   void isChecked(bool? value, int index) {
     bens[index].isEnabled = value!;
-    //print("bencard ${bens[index].isEnabled} ${bens[index].beneficiaryName}");
+
   }
 
   void isCheckedNew(bool? value, Beneficiary beneficiary){
@@ -101,12 +100,9 @@ class _HomeState extends State<Home> {
       updateState();
     }
     String? status = await starter.startSearching();
-    print("finished booking");
     await _endBooking();
     _update();
     Navigator.pushReplacementNamed(context, '/loading');
-    //slotCheck.slotCheck();
-    print(status);
   }
 
   Future<void> _endBooking() async {
@@ -114,9 +110,6 @@ class _HomeState extends State<Home> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('booking', false);
     starter.stopSearching();
-    // setState(() {
-    //   widget._booking = false;
-    // });
     if (widget.inProcess == true) {
       Navigator.pushReplacementNamed(context, '/home');
     }
@@ -155,12 +148,7 @@ class _HomeState extends State<Home> {
       ));
     }
     else {
-      // for (int i = 0; i < bens.length; i ++) {
-      //   print("entered widget gen");
-      //   widgets.add(BenCard(ben: bens[i], onSelect: (bool? test) {isChecked(test, i);}, user: user));
-      // }
       bens.forEach((ben) {
-        print("entered widget gen");
         widgets.add(BenCard(ben: ben, onSelect: (bool? test) {isCheckedNew(test, ben);}, user: user, checked: benChecked(ben.isEnabled),));
       });
     }

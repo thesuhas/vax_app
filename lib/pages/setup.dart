@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vax_app/services/script.dart';
 import 'package:vax_app/services/localdata.dart';
 
 class Setup extends StatefulWidget {
@@ -13,16 +12,10 @@ class _SetupState extends State<Setup> {
   final myController = TextEditingController();
   bool _validate = false;
 
-  Automate aut = Automate(sessionId: "", slots: [""], centerId: "");
 
   User user = User();
 
-  // Saving data
-  // Future _save(String number) async{
-  //   SharedPreferences pref = await SharedPreferences.getInstance();
-  //   pref.setString('phoneNumber', number);
-  //   pref.setBool('isSetUp', true);
-  // }
+
   void _save(String number) async {
     user.phNo = int.parse(number);
     String strUser = user.saveUser();
@@ -30,16 +23,6 @@ class _SetupState extends State<Setup> {
     prefs.setString('user', strUser);
   }
 
-  Future _check() async {
-    print("Check called");
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    print(pref.get('phoneNumber'));
-  }
-
-  Future _clear() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.clear();
-  }
 
   // Function to clear field on disposing widget
   @override
