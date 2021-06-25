@@ -130,7 +130,24 @@ class _LoadingDataState extends State<LoadingData> {
     return Scaffold(
         backgroundColor: Colors.grey[900],
         body: Center(
-          child: CircularProgressIndicator(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Getting required data",
+                style: TextStyle(
+                  color: Colors.amberAccent[200],
+                  fontSize: 20,
+                  letterSpacing: 2,
+                ),
+              ),
+              SizedBox(height: 40,),
+              CircularProgressIndicator(
+                color: Colors.amberAccent[200],
+              ),
+            ],
+          ),
         ),
     );
   }
