@@ -68,7 +68,6 @@ class ApiCalls {
             Uri.parse(url),
             headers: headers
         );
-        print(response.statusCode);
         if(response.statusCode == 200){
           var resp = jsonDecode(response.body);
           sessions.add(resp['sessions']);
@@ -83,6 +82,7 @@ class ApiCalls {
         }
       });
     });
+    //print(centers);
     return centers;
   }
 
@@ -235,7 +235,13 @@ class ApiCalls {
     if(await checkPerms() == true) {
       Directory? directory = await getExternalStorageDirectory();
       directory = directory!.parent.parent.parent.parent;
-      String path = "${directory.path}/Download/Appointment Slip - ${beneficiary.beneficiaryName.toString()}.pdf";
+      String path;
+      if (beneficiary.bookedSlot == true) {
+        path = "${directory.path}/Download/Appointment Slip (Dose 1) - ${beneficiary.beneficiaryName.toString()}.pdf";
+      }
+      else {
+        path = "${directory.path}/Download/Appointment Slip - ${beneficiary.beneficiaryName.toString()}.pdf";
+      }
       File file = File(path);
       if(file.existsSync() == true) {
         OpenFile.open(path);
@@ -262,8 +268,15 @@ class ApiCalls {
     if(await checkPerms() == true) {
       Directory? directory = await getExternalStorageDirectory();
       directory = directory!.parent.parent.parent.parent;
-      String path = "${directory.path}/Download/Certificate - ${beneficiary
-          .beneficiaryName.toString()}.pdf";
+      String path;
+      if (beneficiary.isDoseOneDone == true && beneficiary.isDoseTwoDone == false) {
+        path = "${directory.path}/Download/Certificate (Dose 1) - ${beneficiary
+            .beneficiaryName.toString()}.pdf";
+      }
+      else {
+        path = "${directory.path}/Download/Certificate - ${beneficiary
+            .beneficiaryName.toString()}.pdf";
+      }
       File file = File(path);
       if(file.existsSync() == true) {
         OpenFile.open(path);

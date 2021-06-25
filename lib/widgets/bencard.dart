@@ -150,6 +150,19 @@ class _BenCardState extends State<BenCard> {
               letterSpacing: 2,
              ),
            ),
+         ),
+         TextButton(
+           onPressed: () {frontEndCalls.downloadCert(widget.ben);},
+           child: Text(
+               "Certificate"
+           ),
+           style: TextButton.styleFrom(
+             backgroundColor: Colors.grey[900],
+             primary: Colors.lightGreenAccent,
+             textStyle: TextStyle(
+               letterSpacing: 2,
+             ),
+           ),
          )
        ];
     }
@@ -171,48 +184,123 @@ class _BenCardState extends State<BenCard> {
        ];
      }
     else  {
-       if ((widget.ben.vaccinationStatus == "Partially Vaccinated" && dueDateCheck() == true) || (widget.ben.vaccinationStatus == "Not Vaccinated" && widget.ben.bookedSlot == false) && widget.ben.vaccinationStatus != "Vaccinated") {
+       if (widget.ben.vaccinationStatus == "Partially Vaccinated" && dueDateCheck() == true) {
          return <Widget>[
            Container(
-             padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-             child: Row(
+             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+             child: Column(
+               crossAxisAlignment: CrossAxisAlignment.start,
                children: <Widget>[
-                 Text(
-                   "Book:",
-                   style: TextStyle(
-                     color: Colors.grey[800],
+                 Row(
+                 children: <Widget>[
+                   Text(
+                     "Book:",
+                     style: TextStyle(
+                       color: Colors.grey[800],
+                     ),
                    ),
-                 ),
-                 SizedBox(
-                   height: 24,
-                   child: Checkbox(
-                     value: widget.checked,
-                     onChanged: (bool? value) {
-                       setState(() {
-                         widget.checked = value!;
-                       });
-                       widget.onSelect(value!);
-                     },
-                     activeColor: Colors.black,
+                   SizedBox(
+                     height: 24,
+                     child: Checkbox(
+                       value: widget.checked,
+                       onChanged: (bool? value) {
+                         setState(() {
+                           widget.checked = value!;
+                         });
+                         widget.onSelect(value!);
+                       },
+                       activeColor: Colors.black,
+                     ),
                    ),
-                 ),
-
-               ],
+                 ],
+               ),
+                 Container(
+                   padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                   child: TextButton(
+                     onPressed: () {frontEndCalls.downloadCert(widget.ben);},
+                     child: Text(
+                         "Certificate"
+                     ),
+                     style: TextButton.styleFrom(
+                       backgroundColor: Colors.grey[900],
+                       primary: Colors.lightGreenAccent,
+                       textStyle: TextStyle(
+                         letterSpacing: 2,
+                       ),
+                     ),
+                   ),
+                 )
+                ]
              ),
            ),
          ];
        }
-       else if (widget.ben.vaccinationStatus == "Partially Vaccinated") {
+       else if (widget.ben.vaccinationStatus == "Not Vaccinated" && widget.ben.bookedSlot == false) {
          return <Widget>[
            Container(
-             padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-             child: Text(
-               "Eligible from: ${returnEligible()}",
-               style: TextStyle(
-                  color: Colors.grey[800],
-                 fontWeight: FontWeight.bold,
-               ),
+             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+             child: Column(
+                 children: <Widget>[
+                   Row(
+                     children: <Widget>[
+                       Text(
+                         "Book:",
+                         style: TextStyle(
+                           color: Colors.grey[800],
+                         ),
+                       ),
+                       SizedBox(
+                         height: 24,
+                         child: Checkbox(
+                           value: widget.checked,
+                           onChanged: (bool? value) {
+                             setState(() {
+                               widget.checked = value!;
+                             });
+                             widget.onSelect(value!);
+                           },
+                           activeColor: Colors.black,
+                         ),
+                       ),
+                     ],
+                   ),
+                 ]
              ),
+           ),
+         ];
+       }
+       else if (widget.ben.vaccinationStatus == "Partially Vaccinated" && dueDateCheck() == false) {
+         return <Widget>[
+           Column(
+             crossAxisAlignment: CrossAxisAlignment.start,
+             children: <Widget>[
+                 Container(
+                 padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                 child: Text(
+                   "Eligible from: ${returnEligible()}",
+                   style: TextStyle(
+                      color: Colors.grey[800],
+                     fontWeight: FontWeight.bold,
+                   ),
+                 ),
+               ),
+               Container(
+                 padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                 child: TextButton(
+                   onPressed: () {frontEndCalls.downloadCert(widget.ben);},
+                   child: Text(
+                       "Certificate"
+                   ),
+                   style: TextButton.styleFrom(
+                     backgroundColor: Colors.grey[900],
+                     primary: Colors.lightGreenAccent,
+                     textStyle: TextStyle(
+                       letterSpacing: 2,
+                     ),
+                   ),
+                 ),
+               )
+             ]
            ),
          ];
        }

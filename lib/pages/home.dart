@@ -110,9 +110,9 @@ class _HomeState extends State<Home> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('booking', false);
     starter.stopSearching();
-    if (widget.inProcess == true) {
-      Navigator.pushReplacementNamed(context, '/home');
-    }
+    //if (widget.inProcess == true) {
+    Navigator.pushReplacementNamed(context, '/home');
+    //}
   }
 
   bool _checkBool(bool? test) {

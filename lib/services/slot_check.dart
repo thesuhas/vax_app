@@ -76,6 +76,7 @@ class SlotCheck{
           List<dynamic> validCenters = [];
         //print("valid centers before distr: $validCenters");
         validCenters = distribute(ben, centers);
+        print(validCenters);
         //print(validCenters);
         if (validCenters.length != 0) {
           for (int j = 0; j < validCenters.length; j ++) {
@@ -92,12 +93,12 @@ class SlotCheck{
               benId = 0;
             }
             List<int> beneficiaries = [benId];
-            print(bookCenter);
             Map<int, String> scheduleResponse = await apiCalls.schedule(
                 dose, sessionId, slot, centerId, beneficiaries);
             for (var key in scheduleResponse.keys) {
               if (key == 200 && booked == false) {
                 // Refresh beneficiaries
+                print("done");
                 status.add('done');
                 booked = true;
                 bookedBens ++;
@@ -139,15 +140,16 @@ class SlotCheck{
   // This function checks each beneficiary's unique data and filters out the incoming list of centers
   // according to it's requirements
   List<dynamic> distribute(Beneficiary benObj, List<dynamic> centers) {
-    print(benObj.isDoseOneDone);
+    print("Input: $centers");
     if(benObj.isEnabled == true && benObj.bookedSlot == false){
       print("statement 1");
       if(benObj.isYoung == true){
-        print("young");
         centers = filterYoung(centers);
+        print("Young: $centers");
       }
       // Filter vaccine
       centers = filterVaccine(centers, benObj.vaccine.toString());
+      print("Vaccine: $centers");
       //print(centers);
       if(benObj.isDoseOneDone == false){
         return centers;
@@ -155,7 +157,8 @@ class SlotCheck{
       else if(benObj.isDoseOneDone == true && benObj.isDoseTwoDone == false){
         //print("test");
         if(validDueDate(benObj.doseOneDate.toString(), benObj.vaccine.toString())){
-          return validDoseTwo(centers);
+          centers = validDoseTwo(centers);
+          print("Dose two:$centers");
         }
 
       }
