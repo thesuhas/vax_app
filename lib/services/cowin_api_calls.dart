@@ -236,7 +236,7 @@ class ApiCalls {
       Directory? directory = await getExternalStorageDirectory();
       directory = directory!.parent.parent.parent.parent;
       String path;
-      if (beneficiary.bookedSlot == true) {
+      if (beneficiary.bookedSlot == true && beneficiary.isDoseOneDone == false) {
         path = "${directory.path}/Download/Appointment Slip (Dose 1) - ${beneficiary.beneficiaryName.toString()}.pdf";
       }
       else {

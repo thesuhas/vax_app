@@ -124,52 +124,159 @@ class _BenCardState extends State<BenCard> {
   List<Widget> checkOrSlip() {
      if (widget.ben.bookedSlot == true && widget.ben.isDoseTwoDone == false) {
        return <Widget>[
-         TextButton(
-           onPressed: () {frontEndCalls.downloadAppoint(widget.ben);},
-           child: Text(
-               "Appointment Slip"
-           ),
-           style: TextButton.styleFrom(
-             backgroundColor: Colors.grey[900],
-             primary: Colors.amberAccent[200],
-             textStyle: TextStyle(
-               letterSpacing: 2,
+         Column(
+           mainAxisAlignment: MainAxisAlignment.start,
+           crossAxisAlignment: CrossAxisAlignment.start,
+           children: <Widget>[
+             Row(
+               children: <Widget>[
+                 TextButton(
+                   onPressed: () {
+                     frontEndCalls.downloadAppoint(widget.ben);
+                     showDialog<String>(
+                         context: context,
+                         builder: (BuildContext context) => AlertDialog(
+                           title: const Text('Download has been Initiated'),
+                           content: const Text('If an OTP is not generated from CoWIN in the next two minutes, or if the PDF does not open, please try again later.'),
+                           actions: <Widget>[
+                             TextButton(
+                               onPressed: () {
+                                 Navigator.of(context).pop();
+                               },
+                               child: Text(
+                                 "OK",
+                                 style: TextStyle(
+                                   color: Colors.black,
+                                 ),
+                               ),
+                             )
+                           ],
+                           backgroundColor: Colors.amberAccent[200],
+                         )
+                     );
+                     },
+                   child: Text(
+                       "Appointment Slip"
+                   ),
+                   style: TextButton.styleFrom(
+                     backgroundColor: Colors.grey[900],
+                     primary: Colors.amberAccent[200],
+                     textStyle: TextStyle(
+                       letterSpacing: 2,
+                     ),
+                   ),
+                 ),
+                 SizedBox(width: 5.0,),
+                 TextButton(
+                   onPressed: () {
+                     cancel(widget.ben);
+                     showDialog<String>(
+                         context: context,
+                         builder: (BuildContext context) => AlertDialog(
+                           title: const Text('Cancellation has been Initiated'),
+                           content: const Text('If you do not get an SMS from CoWIN in the next 2 minutes confirming the cancellation, please try again later.'),
+                           actions: <Widget>[
+                             TextButton(
+                               onPressed: () {
+                                 Navigator.of(context).pop();
+                               },
+                               child: Text(
+                                 "OK",
+                                 style: TextStyle(
+                                   color: Colors.black,
+                                 ),
+                               ),
+                             )
+                           ],
+                           backgroundColor: Colors.amberAccent[200],
+                         )
+                     );
+                   },
+                   child: Text(
+                       "Cancel"
+                   ),
+                   style: TextButton.styleFrom(
+                     backgroundColor: Colors.grey[900],
+                     primary: Colors.redAccent[200],
+                     textStyle: TextStyle(
+                       letterSpacing: 2,
+                     ),
+                   ),
+                 ),
+               ],
              ),
-           ),
+             if (widget.ben.isDoseOneDone == true)
+               Row(
+                 children: <Widget>[
+                   TextButton(
+                     onPressed: () {
+                       frontEndCalls.downloadCert(widget.ben);
+                       showDialog<String>(
+                           context: context,
+                           builder: (BuildContext context) => AlertDialog(
+                             title: const Text('Download has been Initiated'),
+                             content: const Text('If an OTP is not generated from CoWIN in the next two minutes, or if the PDF does not open, please try again later.'),
+                             actions: <Widget>[
+                               TextButton(
+                                 onPressed: () {
+                                   Navigator.of(context).pop();
+                                 },
+                                 child: Text(
+                                   "OK",
+                                   style: TextStyle(
+                                     color: Colors.black,
+                                   ),
+                                 ),
+                               )
+                             ],
+                             backgroundColor: Colors.amberAccent[200],
+                           )
+                       );
+                       },
+                     child: Text(
+                         "Certificate"
+                     ),
+                     style: TextButton.styleFrom(
+                       backgroundColor: Colors.grey[900],
+                       primary: Colors.lightGreenAccent,
+                       textStyle: TextStyle(
+                         letterSpacing: 2,
+                       ),
+                     ),
+                   )
+                 ],
+               ),
+           ],
          ),
-         SizedBox(width: 5.0,),
-         TextButton(
-             onPressed: () {cancel(widget.ben);},
-             child: Text(
-               "Cancel"
-             ),
-             style: TextButton.styleFrom(
-              backgroundColor: Colors.grey[900],
-              primary: Colors.redAccent[200],
-              textStyle: TextStyle(
-              letterSpacing: 2,
-             ),
-           ),
-         ),
-         TextButton(
-           onPressed: () {frontEndCalls.downloadCert(widget.ben);},
-           child: Text(
-               "Certificate"
-           ),
-           style: TextButton.styleFrom(
-             backgroundColor: Colors.grey[900],
-             primary: Colors.lightGreenAccent,
-             textStyle: TextStyle(
-               letterSpacing: 2,
-             ),
-           ),
-         )
        ];
     }
     else if (widget.ben.isDoseTwoDone == true) {
        return <Widget>[
          TextButton(
-           onPressed: () {frontEndCalls.downloadCert(widget.ben);},
+           onPressed: () {
+             frontEndCalls.downloadCert(widget.ben);
+             showDialog<String>(
+                 context: context,
+                 builder: (BuildContext context) => AlertDialog(
+                   title: const Text('Download has been Initiated'),
+                   content: const Text('If an OTP is not generated from CoWIN in the next two minutes, or if the PDF does not open, please try again later.'),
+                   actions: <Widget>[
+                     TextButton(
+                       onPressed: () {
+                         Navigator.of(context).pop();
+                       },
+                       child: Text(
+                         "OK",
+                         style: TextStyle(
+                           color: Colors.black,
+                         ),
+                       ),
+                     )
+                   ],
+                   backgroundColor: Colors.amberAccent[200],
+                 )
+             );
+             },
            child: Text(
                "Certificate"
            ),
@@ -217,7 +324,30 @@ class _BenCardState extends State<BenCard> {
                  Container(
                    padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
                    child: TextButton(
-                     onPressed: () {frontEndCalls.downloadCert(widget.ben);},
+                     onPressed: () {
+                       frontEndCalls.downloadCert(widget.ben);
+                       showDialog<String>(
+                           context: context,
+                           builder: (BuildContext context) => AlertDialog(
+                             title: const Text('Download has been Initiated'),
+                             content: const Text('If an OTP is not generated from CoWIN in the next two minutes, or if the PDF does not open, please try again later.'),
+                             actions: <Widget>[
+                               TextButton(
+                                 onPressed: () {
+                                   Navigator.of(context).pop();
+                                 },
+                                 child: Text(
+                                   "OK",
+                                   style: TextStyle(
+                                     color: Colors.black,
+                                   ),
+                                 ),
+                               )
+                             ],
+                             backgroundColor: Colors.amberAccent[200],
+                           )
+                       );
+                       },
                      child: Text(
                          "Certificate"
                      ),
@@ -287,7 +417,30 @@ class _BenCardState extends State<BenCard> {
                Container(
                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                  child: TextButton(
-                   onPressed: () {frontEndCalls.downloadCert(widget.ben);},
+                   onPressed: () {
+                     frontEndCalls.downloadCert(widget.ben);
+                     showDialog<String>(
+                         context: context,
+                         builder: (BuildContext context) => AlertDialog(
+                           title: const Text('Download has been Initiated'),
+                           content: const Text('If an OTP is not generated from CoWIN in the next two minutes, or if the PDF does not open, please try again later.'),
+                           actions: <Widget>[
+                             TextButton(
+                               onPressed: () {
+                                 Navigator.of(context).pop();
+                               },
+                               child: Text(
+                                 "OK",
+                                 style: TextStyle(
+                                   color: Colors.black,
+                                 ),
+                               ),
+                             )
+                           ],
+                           backgroundColor: Colors.amberAccent[200],
+                         )
+                     );
+                     },
                    child: Text(
                        "Certificate"
                    ),
