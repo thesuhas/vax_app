@@ -351,6 +351,25 @@ class _HomeState extends State<Home> {
                         color: Colors.amberAccent[200],
                       ),
                     ),
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      child: ListTile(
+                        title: Text(
+                          "About Us",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(context, '/aboutus');
+                        },
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.amberAccent[200],
+                      ),
+                    ),
                   ],
                 ),
               ),

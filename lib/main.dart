@@ -8,6 +8,7 @@ import 'package:vax_app/pages/loading.dart';
 import 'package:vax_app/pages/pincode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vax_app/pages/feetype.dart';
+import 'package:vax_app/pages/aboutus.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +36,7 @@ void main() async{
       '/disclaimer': (context) => Disclaimer(),
       '/vaccine': (context) => Vaccine(),
       '/feetype': (context) => FeeType(),
+      '/aboutus': (context) => AboutUs(),
     },
     debugShowCheckedModeBanner: false,
   ));
