@@ -206,7 +206,7 @@ class _HomeState extends State<Home> {
                       child: DrawerHeader(
 
                         child: Text(
-                          "Pages",
+                          "Menu",
                           style: TextStyle(
                             color: Colors.amberAccent[200],
                             fontWeight: FontWeight.bold,
@@ -229,7 +229,7 @@ class _HomeState extends State<Home> {
                         onTap: () {
                           if (!_checkBool(widget._booking)) {
                             _redirect();
-                            Navigator.pushReplacementNamed(context, '/pincode');
+                            Navigator.pushNamed(context, '/pincode');
                           }
                           else {
                             showDialog<String>(
@@ -274,7 +274,7 @@ class _HomeState extends State<Home> {
                         onTap: () {
                           if (!_checkBool(widget._booking)) {
                             _redirect();
-                            Navigator.pushReplacementNamed(context, '/vaccine');
+                            Navigator.pushNamed(context, '/vaccine');
                           }
                           else {
                             showDialog<String>(
@@ -319,7 +319,7 @@ class _HomeState extends State<Home> {
                         onTap: () {
                           if (!_checkBool(widget._booking)) {
                             _redirect();
-                            Navigator.pushReplacementNamed(context, '/feetype');
+                            Navigator.pushNamed(context, '/feetype');
                           }
                           else {
                             showDialog<String>(
