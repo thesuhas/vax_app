@@ -151,6 +151,7 @@ class ApiCalls {
       var resp = jsonDecode(response.body);
       token = resp['token'];
       headers['Authorization'] = 'Bearer $token';
+      storeHeaders('Bearer $token');
     }
   }
 
@@ -195,17 +196,32 @@ class ApiCalls {
 
   // Shortcut functions
   Future<void> setToken() async {
-    listen();
-    otp = null;
-    await getOtp();
-    if (otp == null) {
-      await gotOtp();
-      // await Future.delayed(Duration(seconds: 2));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? heads = prefs.getString('headers');
+    String? time = prefs.getString('headersTime');
+    if(heads == null || time == null || checkTime(time) == false){
+      listen();
+      otp = null;
+      await getOtp();
+      if (otp == null) {
+        await gotOtp();
+        // await Future.delayed(Duration(seconds: 2));
+      }
+      // await Future.delayed(Duration(seconds: 5), () async {
+      //   print("delay done");
+      await validateOtp(otp.toString());
     }
-    // await Future.delayed(Duration(seconds: 5), () async {
-    //   print("delay done");
-    await validateOtp(otp.toString());
-    // });
+    else{
+      headers['Authorization'] = heads.toString();
+    }
+  }
+
+  bool checkTime(String? savedTime){
+    DateTime now = DateTime.now();
+    DateTime saved = DateTime.parse(savedTime.toString()).add(Duration(minutes: 15));
+    bool check = now.isBefore(saved);
+    return check;
+
   }
   Future<void> bookToken() async {
     listen();
@@ -341,6 +357,13 @@ class ApiCalls {
     else{
       return false;
     }
+  }
+
+  Future<void> storeHeaders (String heads) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String now = DateTime.now().toString();
+    prefs.setString('headers', heads);
+    prefs.setString('headersTime', now);
   }
 
 
