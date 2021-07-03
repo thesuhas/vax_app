@@ -215,7 +215,7 @@ class _BenCardState extends State<BenCard> {
                            context: context,
                            builder: (BuildContext context) => AlertDialog(
                              title: const Text('Download has been Initiated'),
-                             content: const Text('If an OTP is not generated from CoWIN in the next two minutes, or if the PDF does not open, please try again later.'),
+                             content: const Text('If the PDF file does not open in the next two minutes, please try again later.'),
                              actions: <Widget>[
                                TextButton(
                                  onPressed: () {
@@ -259,7 +259,7 @@ class _BenCardState extends State<BenCard> {
                  context: context,
                  builder: (BuildContext context) => AlertDialog(
                    title: const Text('Download has been Initiated'),
-                   content: const Text('If an OTP is not generated from CoWIN in the next two minutes, or if the PDF does not open, please try again later.'),
+                   content: const Text('If the PDF file does not open in the next two minutes, please try again later.'),
                    actions: <Widget>[
                      TextButton(
                        onPressed: () {
@@ -330,7 +330,7 @@ class _BenCardState extends State<BenCard> {
                            context: context,
                            builder: (BuildContext context) => AlertDialog(
                              title: const Text('Download has been Initiated'),
-                             content: const Text('If an OTP is not generated from CoWIN in the next two minutes, or if the PDF does not open, please try again later.'),
+                             content: const Text('If the PDF file does not open in the next two minutes, please try again later.'),
                              actions: <Widget>[
                                TextButton(
                                  onPressed: () {
@@ -423,7 +423,7 @@ class _BenCardState extends State<BenCard> {
                          context: context,
                          builder: (BuildContext context) => AlertDialog(
                            title: const Text('Download has been Initiated'),
-                           content: const Text('If an OTP is not generated from CoWIN in the next two minutes, or if the PDF does not open, please try again later.'),
+                           content: const Text('If the PDF file does not open in the next two minutes, please try again later.'),
                            actions: <Widget>[
                              TextButton(
                                onPressed: () {
